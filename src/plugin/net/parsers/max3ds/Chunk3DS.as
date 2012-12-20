@@ -21,7 +21,7 @@ package plugin.net.parsers.max3ds
 	 * ...
 	 * @author Gary Paluk
 	 */
-	public class ChunkMax3DS 
+	public class Chunk3DS 
 	{
 		public static const NULL_CHUNK: int             = 0x0000;
 		public static const M3DMAGIC: int               = 0x4D4D;
@@ -251,14 +251,14 @@ package plugin.net.parsers.max3ds
 		
 		public var pos: int;
 		
-		public function ChunkMax3DS( ) 
+		public function Chunk3DS( ) 
 		{
 			
 		}
 		
-		public static function createFromPosition( start: int, id: int, length: int ): ChunkMax3DS
+		public static function createFromPosition( start: int, id: int, length: int ): Chunk3DS
 		{
-			var chunk: ChunkMax3DS = new ChunkMax3DS();
+			var chunk: Chunk3DS = new Chunk3DS();
 			chunk.start = start;
 			chunk.id = id;
 			chunk.length = length;
@@ -268,9 +268,9 @@ package plugin.net.parsers.max3ds
 			return chunk;
 		}
 		
-		public static function createFromLength( length: int ): ChunkMax3DS
+		public static function createFromLength( length: int ): Chunk3DS
 		{
-			var chunk: ChunkMax3DS = new ChunkMax3DS();
+			var chunk: Chunk3DS = new Chunk3DS();
 			chunk.start = 0;
 			chunk.next = length;
 			chunk.id = 0;
