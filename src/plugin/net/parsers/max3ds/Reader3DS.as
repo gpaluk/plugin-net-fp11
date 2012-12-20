@@ -35,7 +35,7 @@ package plugin.net.parsers.max3ds
 		{
 			if ( MAX_FILESIZE < data.length )
 			{
-				throw new ParserMax3DSError( "Size of file exceeds practical limits." );
+				throw new Parser3DSError( "Size of file exceeds practical limits." );
 			}
 			else
 			{

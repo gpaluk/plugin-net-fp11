@@ -15,25 +15,30 @@
  * You should  have received a copy of the GNU Lesser General Public License
  * along with  this program; If not, see <http://www.gnu.org/licenses/>. 
  */
-package plugin.net.parsers.max3ds.types 
+package plugin.net.parsers.max3ds.enum 
 {
-	import plugin.net.parsers.max3ds.enum.Node3DSType;
-	import plugin.net.parsers.max3ds.enum.Track3DSType;
-	
 	/**
 	 * ...
 	 * @author Gary Paluk
 	 */
-	public class AmbientColorNode3DS extends Node3DS
+	public class Map3DSType 
 	{
 		
-		public var color: Array = [];
-		public var colorTrack: Track3DS = new Track3DS( Track3DSType.VECTOR );
+		public static const NONE: Map3DSType = new Map3DSType( -1 );
+		public static const PLANAR: Map3DSType = new Map3DSType( 0 );
+		public static const CYLINDRICAL: Map3DSType = new Map3DSType( 1 );
+		public static const SPHERICAL: Map3DSType = new Map3DSType( 2 );
 		
-		public function AmbientColorNode3DS() 
+		private var _type: int;
+		public function Map3DSType( type: int ) 
 		{
-			super( Node3DSType.AMBIENT_COLOR );
-			name = "$AMBIENT$";
+			_type = type;
+		}
+		
+		[Inline]
+		public final function get type():int 
+		{
+			return _type;
 		}
 		
 	}

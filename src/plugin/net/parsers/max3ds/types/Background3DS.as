@@ -1,0 +1,128 @@
+/*
+ * Plugin.IO - http://www.plugin.io
+ * Copyright (c) 2012
+ * 
+ * This program is free  software: you can redistribute it and/or modify 
+ * it under the terms of the GNU Lesser General Public License as published 
+ * by the Free Software Foundation, either version 3 of the License, or 
+ * (at your option) any later version.
+ * 
+ * This program  is  distributed in the hope that it will be useful, 
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should  have received a copy of the GNU Lesser General Public License
+ * along with  this program; If not, see <http://www.gnu.org/licenses/>. 
+ */
+package plugin.net.parsers.max3ds.types 
+{
+	import plugin.net.parsers.max3ds.Chunk3DS;
+	import plugin.net.parsers.max3ds.Reader3DS;
+	/**
+	 * ...
+	 * @author Gary Paluk
+	 */
+	public class Background3DS 
+	{
+		
+		public var useBitmap: Boolean;
+		public var bitmapName: String;
+		public var useSolid: Boolean;
+		public var solidColor: Array = [ 0, 0, 0 ];
+		public var useGradient: Boolean;
+		public var gradientPercent: Number;
+		public var gradientTop: Array = [ 0, 0, 0 ];
+		public var gradientMiddle: Array = [ 0, 0, 0 ];
+		public var gradientBottom: Array = [ 0, 0, 0 ];
+		
+		public function Background3DS( model: Model3DS, r:Reader3DS, cp: Chunk3DS ) 
+		{
+			read( model, r, cp );
+		}
+		
+		public function read( model: Model3DS, r: Reader3DS, cp: Chunk3DS ): void
+		{
+			var cp1: Chunk3DS = r.next( cp );
+			switch( cp1.id )
+			{
+				case Chunk3DS.BIT_MAP:
+						bitmapName = r.readString( cp1 );
+					break;
+				case Chunk3DS.SOLID_BGND:
+						var lin: Boolean = false;
+						while ( cp1.inside() )
+						{
+							var cp2: Chunk3DS = r.next( cp1 );
+							switch( cp2.id )
+							{
+								case Chunk3DS.LIN_COLOR_F:
+										r.readColor( cp2, solidColor );
+										lin = true;
+									break;
+								case Chunk3DS.COLOR_F:
+										r.readColor( cp2, solidColor );
+									break;
+							}
+						}
+					break;
+				case Chunk3DS.V_GRADIENT:
+						var index: Array = [ 0, 0 ];
+						var col: Array = [];
+						
+						var dim1: int;
+						var dim2: int;
+						var dim3: int;
+						for ( dim1 = 0; dim1 < 2; ++dim1 )
+						{
+							col[ dim1 ] = [];
+							for ( dim2 = 0; dim2 < 3; ++dim2 )
+							{
+								col[ dim1 ][ dim2 ] = [];
+								for ( dim3 = 0; dim3 < 3; ++dim3 )
+								{
+									col[ dim1 ][ dim2 ][ dim3 ] = 0;
+								}
+							}
+						}
+						
+						var lin: int = 0;
+						gradientPercent = r.readFloat( cp1 );
+						while ( cp1.inside() )
+						{
+							var cp2: Chunk3DS = r.next( cp1 );
+							switch( cp2.id )
+							{
+								case Chunk3DS.COLOR_F:
+										r.readColor( cp2, col[ 0 ][ index[ 0 ]] );
+										index[ 0 ]++;
+									break;
+								case Chunk3DS.LIN_COLOR_F:
+										r.readColor( cp2, col[ 1 ][ index[ 1 ]] );
+										index[ 1 ]++;
+										lin = 1;
+									break;
+							}
+						}
+						for ( i = 0; i < 3; ++i )
+						{
+							gradientTop[ i ] = col[ lin ][ 0 ][ i ];
+							gradientMiddle[ i ] = col[ lin ][ 1 ][ i ];
+							gradientBottom[ i ] = col[ lin ][ 2 ][ i ];
+						}
+					break;
+				case Chunk3DS.USE_BIT_MAP:
+						useBitmap = true;
+					break;
+				case Chunk3DS.USE_SOLID_BGND:
+						useSolid = true;
+					break;
+				case Chunk3DS.USE_V_GRADIENT:
+						useGradient = true;
+					break;
+			}
+		}
+		
+	}
+
+}

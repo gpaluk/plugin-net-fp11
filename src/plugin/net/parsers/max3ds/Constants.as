@@ -15,26 +15,16 @@
  * You should  have received a copy of the GNU Lesser General Public License
  * along with  this program; If not, see <http://www.gnu.org/licenses/>. 
  */
-package plugin.net.parsers.max3ds.types 
+package plugin.net.parsers.max3ds 
 {
-	import plugin.net.parsers.max3ds.enum.Node3DSType;
-	import plugin.net.parsers.max3ds.enum.Track3DSType;
-	
 	/**
 	 * ...
 	 * @author Gary Paluk
 	 */
-	public class AmbientColorNode3DS extends Node3DS
+	public class Constants 
 	{
 		
-		public var color: Array = [];
-		public var colorTrack: Track3DS = new Track3DS( Track3DSType.VECTOR );
-		
-		public function AmbientColorNode3DS() 
-		{
-			super( Node3DSType.AMBIENT_COLOR );
-			name = "$AMBIENT$";
-		}
+		public static const VECTOR_EPSILON: Number = 1e-8;
 		
 	}
 

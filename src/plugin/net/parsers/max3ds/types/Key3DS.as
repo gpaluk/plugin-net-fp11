@@ -27,8 +27,8 @@ package plugin.net.parsers.max3ds.types
 	public class Key3DS 
 	{
 		
-		public var frame: int;
-		public var flags: int;
+		public var frame: int = 0;
+		public var flags: int = 0;
 		public var tens: Number = 0;
 		public var cont: Number = 0;
 		public var bias: Number = 0;
@@ -47,7 +47,23 @@ package plugin.net.parsers.max3ds.types
 			flags = r.readU16( cp );
 			if ( 0 != (flags & Key3DSFlags.USE_TENS.flag ) )
 			{
-				
+				tens = r.readFloat( cp );
+			}
+			if ( 0 != ( flags & Key3DSFlags.USE_CONT.flag ) )
+			{
+				cont = r.readFloat( cp );
+			}
+			if ( 0 != ( flags & Key3DSFlags.USE_BIAS.flag ) )
+			{
+				bias = r.readFloat( cp );
+			}
+			if ( 0 != ( flags & Key3DSFlags.USE_EASE_TO ) )
+			{
+				easeTo = r.readFloat( cp );
+			}
+			if ( 0 != ( flags & Key3DSFlags.USE_EASE_FROM ) )
+			{
+				easeFrom = r.readFloat( cp );
 			}
 		}
 		

@@ -282,7 +282,7 @@ package plugin.net.parsers.max3ds
 		
 		public function inside(): Boolean
 		{
-			return (this.pos < this.next );
+			return ( pos < next );
 		}
 		
 		public function skip( p: int ): void

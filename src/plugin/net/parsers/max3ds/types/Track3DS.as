@@ -18,6 +18,7 @@
 package plugin.net.parsers.max3ds.types 
 {
 	import plugin.net.parsers.max3ds.Chunk3DS;
+	import plugin.net.parsers.max3ds.enum.Key3DSFlags;
 	import plugin.net.parsers.max3ds.enum.Track3DSType;
 	import plugin.net.parsers.max3ds.Reader3DS;
 	/**
@@ -33,7 +34,6 @@ package plugin.net.parsers.max3ds.types
 		
 		public function Track3DS( type: Track3DSType ) 
 		{
-			super();
 			this.type = type;
 		}
 		
@@ -44,19 +44,41 @@ package plugin.net.parsers.max3ds.types
 			var nKeys: int = r.readS32( cp );
 			keys = [];
 			
+			var i: int;
 			switch( type )
 			{
 				case Track3DSType.BOOL:
-					
+						for ( i = 0; i < nKeys; ++i )
+						{
+							keys[ i ] = new Key3DS();
+							keys[ i ].read( model, r, cp );
+							keys[ i ].frame = r.readS32( cp );
+						}
 					break;
 				case Track3DSType.FLOAT:
-					
+						for ( i = 0; i < nKeys; ++i )
+						{
+							keys[ i ] = new Key3DS();
+							keys[ i ].read( model, r, cp );
+							keys[ i ].value[ 0 ] = r.readFloat( cp );
+						}
 					break;
 				case Track3DSType.VECTOR:
-					
+						for ( i = 0; i < nKeys; ++i )
+						{
+							keys[ i ] = new Key3DS();
+							keys[ i ].read( model, r, cp );
+							r.readVector( cp, keys[ i ].value );
+						}
 					break;
 				case Track3DSType.QUAT:
-					
+						for ( i = 0; i < nKeys; ++i )
+						{
+							keys[ i ] = new Key3DS();
+							keys[ i ].read( model, r, cp );
+							keys[ i ].value[ 3 ] = r.readFloat( cp );
+							r.readVector( cp, keys[ i ].value );
+						}
 					break;
 			}
 		}

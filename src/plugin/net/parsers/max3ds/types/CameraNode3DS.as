@@ -18,35 +18,24 @@
 package plugin.net.parsers.max3ds.types 
 {
 	import plugin.net.parsers.max3ds.enum.Node3DSType;
-	import plugin.net.parsers.max3ds.enum.Track3DSFlags;
 	import plugin.net.parsers.max3ds.enum.Track3DSType;
-	
 	/**
 	 * ...
 	 * @author Gary Paluk
 	 */
-	public class MeshInstanceNode3DS extends Node3DS 
+	public class CameraNode3DS extends Node3DS 
 	{
 		
-		public var pivot: Array = [ 0, 0, 0 ];
-		public var instanceName: String;
-		public var bBoxMin: Array = [ 0, 0, 0 ];
-		public var bBoxMax: Array = [ 0, 0, 0 ];
-		public var hide: int = 0;
-		public var pos: Array = [ 0, 0, 0 ];
-		public var rot: Array = [ 0, 0, 0, 0 ];
-		public var scl: Array = [ 0, 0, 0 ];
-		public var morphSmooth: Number = 0;
-		public var morph: String = "";
+		public var pos: Array = [];
+		public var fov: Number;
+		public var roll: Number;
 		public var posTrack: Track3DS = new Track3DS( Track3DSType.VECTOR );
-		public var rotTrack: Track3DS = new Track3DS( Track3DSType.QUAT );
-		public var sclTrack: Track3DS = new Track3DS( Track3DSType.VECTOR );
-		public var hideTrack: Track3DS = new Track3DS( Track3DSType.BOOL );
+		public var fovTrack: Track3DS = new Track3DS( Track3DSType.FLOAT );
+		public var rollTrack: Track3DS = new Track3DS( Track3DSType.FLOAT );
 		
-		public function MeshInstanceNode3DS() 
+		public function CameraNode3DS() 
 		{
-			super( Node3DSType.MESH_INSTANCE );
-			name = "$$$DUMMY";
+			super( Node3DSType.CAMERA );
 		}
 		
 	}

@@ -17,23 +17,16 @@
  */
 package plugin.net.parsers.max3ds.types 
 {
-	import plugin.net.parsers.max3ds.enum.Node3DSType;
-	import plugin.net.parsers.max3ds.enum.Track3DSType;
-	
 	/**
 	 * ...
 	 * @author Gary Paluk
 	 */
-	public class AmbientColorNode3DS extends Node3DS
+	public class Material3DS 
 	{
 		
-		public var color: Array = [];
-		public var colorTrack: Track3DS = new Track3DS( Track3DSType.VECTOR );
-		
-		public function AmbientColorNode3DS() 
+		public function Material3DS() 
 		{
-			super( Node3DSType.AMBIENT_COLOR );
-			name = "$AMBIENT$";
+			
 		}
 		
 	}
