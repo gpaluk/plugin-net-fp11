@@ -30,7 +30,7 @@ package plugin.net.parsers.max3ds.types
 		
 		public var type: Track3DSType;
 		public var flags: int;
-		public var keys: Array = [];
+		public var keys: Array;
 		
 		public function Track3DS( type: Track3DSType ) 
 		{

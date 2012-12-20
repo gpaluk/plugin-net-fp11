@@ -24,17 +24,19 @@ package plugin.net.parsers.max3ds.types
 	public class Color3DS 
 	{
 		
-		public var r: Number;
-		public var g: Number;
-		public var b: Number;
-		
-		public function Color3DS( r: Number = 0, g: Number = 0, b: Number = 0 ) 
+		public function Color3DS( ) 
 		{
-			this.r = r;
-			this.g = g;
-			this.b = b;
 		}
 		
+		public static function fromNumber( number: Number ): Array
+		{
+			return [ number, number, number ];
+		}
+		
+		public static function create(): Array
+		{
+			return [ 0, 0, 0 ];
+		}
 	}
 
 }

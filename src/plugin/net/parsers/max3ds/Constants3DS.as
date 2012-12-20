@@ -21,7 +21,7 @@ package plugin.net.parsers.max3ds
 	 * ...
 	 * @author Gary Paluk
 	 */
-	public class Constants 
+	public class Constants3DS 
 	{
 		
 		public static const VECTOR_EPSILON: Number = 1e-8;

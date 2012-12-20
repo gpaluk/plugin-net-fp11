@@ -17,7 +17,6 @@
  */
 package plugin.net.parsers.max3ds.types 
 {
-	import io.plugin.core.interfaces.IComparable;
 	import plugin.net.parsers.max3ds.Chunk3DS;
 	import plugin.net.parsers.max3ds.enum.Node3DSType;
 	import plugin.net.parsers.max3ds.Reader3DS;
@@ -26,7 +25,7 @@ package plugin.net.parsers.max3ds.types
 	 * ...
 	 * @author Gary Paluk
 	 */
-	public class Node3DS implements IComparable 
+	public class Node3DS
 	{
 		
 		public var type: Node3DSType;
@@ -38,7 +37,7 @@ package plugin.net.parsers.max3ds.types
 		public var nodeID: int = 65535;
 		public var name: String;
 		public var flags: int;
-		public var matrix: Array;
+		public var matrix: Array = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]];
 		
 		public function Node3DS( type: Node3DSType ) 
 		{

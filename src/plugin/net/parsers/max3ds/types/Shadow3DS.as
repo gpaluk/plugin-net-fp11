@@ -17,6 +17,8 @@
  */
 package plugin.net.parsers.max3ds.types 
 {
+	import plugin.net.parsers.max3ds.Chunk3DS;
+	import plugin.net.parsers.max3ds.Reader3DS;
 	/**
 	 * ...
 	 * @author Gary Paluk
@@ -31,7 +33,7 @@ package plugin.net.parsers.max3ds.types
 		
 		public var rayBias: Number;
 		
-		public function Shadow3DS() 
+		public function Shadow3DS( model: Model3DS, t: Reader3DS, cp: Chunk3DS ) 
 		{
 			
 		}

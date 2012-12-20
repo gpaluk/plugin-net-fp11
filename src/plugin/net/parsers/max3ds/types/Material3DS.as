@@ -17,6 +17,8 @@
  */
 package plugin.net.parsers.max3ds.types 
 {
+	import plugin.net.parsers.max3ds.Chunk3DS;
+	import plugin.net.parsers.max3ds.Reader3DS;
 	/**
 	 * ...
 	 * @author Gary Paluk
@@ -24,9 +26,193 @@ package plugin.net.parsers.max3ds.types
 	public class Material3DS 
 	{
 		
-		public function Material3DS() 
+		public static const DEFAULT_AMBIENT: Number = 0.588235;
+		public static const DEFAULT_DIFFUSE: Number = 0.588235;
+		public static const DEFAULT_SPECULAR: Number = 0.898039;
+		public static const DEFAULT_SHININESS: Number = 0.1;
+		public static const DEFAULT_WIRE_SIZE: Number = 1.0;
+		public static const DEFAULT_SHADING: int = 3;
+		
+		public var userId: int;
+		public var userPtr: Object;
+		public var name: String;
+		public var ambient: Array = Color3DS.fromNumber( DEFAULT_AMBIENT );
+		public var diffuse: Array = Color3DS.fromNumber( DEFAULT_DIFFUSE );
+		public var specular: Array = Color3DS.fromNumber( DEFAULT_SPECULAR );
+		public var shininess: Number = DEFAULT_SHININESS;
+		public var shinStrength: Number;
+		public var useBlur: Boolean;
+		public var blur: Number;
+		public var transparency: Number;
+		public var falloff: Number;
+		public var isAdditive: Boolean;
+		public var selfIllumFlag: Boolean;
+		public var selfIllum: Number;
+		public var useFalloff: Boolean;
+		public var shading: int = DEFAULT_SHADING;
+		public var soften: Boolean;
+		public var faceMap: Boolean;
+		public var twoSided: Boolean;
+		public var mapDecal: Boolean;
+		public var useWire: Boolean;
+		public var useWireAbs: Boolean;
+		public var wireSize: Number = DEFAULT_WIRE_SIZE;
+		public var texture1Map: TextureMap3DS = new TextureMap3DS();
+		public var texture1Mask: TextureMap3DS = new TextureMap3DS();
+		public var texture2Map: TextureMap3DS = new TextureMap3DS();
+		public var texture2Mask: TextureMap3DS = new TextureMap3DS();
+		public var opacityMap: TextureMap3DS = new TextureMap3DS();
+		public var opacityMask: TextureMap3DS = new TextureMap3DS();
+		public var bumpMap: TextureMap3DS = new TextureMap3DS();
+		public var bumpMask: TextureMap3DS = new TextureMap3DS();
+		public var specularMap: TextureMap3DS = new TextureMap3DS();
+		public var specularMask: TextureMap3DS = new TextureMap3DS();
+		public var shininessMap: TextureMap3DS = new TextureMap3DS();
+		public var shininessMask: TextureMap3DS = new TextureMap3DS();
+		public var selfIllumMap: TextureMap3DS = new TextureMap3DS();
+		public var selfIllumMask: TextureMap3DS = new TextureMap3DS();
+		public var reflectionMap: TextureMap3DS = new TextureMap3DS();
+		public var reflectionMask: TextureMap3DS = new TextureMap3DS();
+		public var autoReflMapFlags: int;
+		public var autoReflMapAntiAlias: int;
+		public var autoReflMapSize: int;
+		public var autoReflMapFrameStep: int;
+		
+		public function Material3DS( model:Model3DS, r: Reader3DS, cp: Chunk3DS ) 
 		{
-			
+			read( model, r, cp );
+		}
+		
+		public function read( model: Model3DS, r: Reader3DS, cp: Chunk3DS )
+		{
+			while ( cp.inside() )
+			{
+				var cp1: Chunk3DS = r.next( cp );
+				switch( cp1.id )
+				{
+					case Chunk3DS.MAT_NAME:
+							name = r.readString(cp1);
+						break;
+					case Chunk3DS.MAT_AMBIENT:
+							r.readMaterialColor(cp1,ambient);
+						break;
+					case Chunk3DS.MAT_DIFFUSE:
+							r.readMaterialColor(cp1,diffuse);
+						break;
+					case Chunk3DS.MAT_SPECULAR:
+							r.readMaterialColor(cp1,specular);
+						break;
+					case Chunk3DS.MAT_SHININESS:
+							shininess = r.readPercentageS16(cp1,shininess);
+						break;
+					case Chunk3DS.MAT_SHIN2PCT:
+							shinStrength = r.readPercentageS16(cp1,shinStrength);
+						break;
+					case Chunk3DS.MAT_TRANSPARENCY:
+							transparency = r.readPercentageS16(cp1,transparency);
+						break;
+					case Chunk3DS.MAT_XPFALL:
+							falloff = r.readPercentageS16(cp1,falloff);
+						break;
+					case Chunk3DS.MAT_SELF_ILPCT:
+							selfIllum = r.readPercentageS16(cp1, selfIllum);
+						break;
+					case Chunk3DS.MAT_USE_XPFALL:
+							useFalloff = true;
+						break;
+					case Chunk3DS.MAT_REFBLUR:
+							blur = r.readPercentageS16(cp1,blur);
+						break;
+					case Chunk3DS.MAT_USE_REFBLUR:
+							useBlur = true;
+						break;
+					case Chunk3DS.MAT_SHADING:
+							shading = r.readS16(cp1);
+						break;
+					case Chunk3DS.MAT_SELF_ILLUM:
+							selfIllumFlag = true;
+						break;
+					case Chunk3DS.MAT_TWO_SIDE:
+							twoSided = true;
+						break;
+					case Chunk3DS.MAT_DECAL:
+							mapDecal = true;
+						break;
+					case Chunk3DS.MAT_ADDITIVE:
+							isAdditive = true;
+						break;
+					case Chunk3DS.MAT_FACEMAP:
+							faceMap = true;
+						break;
+					case Chunk3DS.MAT_PHONGSOFT:
+							soften = true;
+						break;
+					case Chunk3DS.MAT_WIRE:
+							useWire = true;
+						break;
+					case Chunk3DS.MAT_WIREABS:
+							useWireAbs = true;
+						break;
+					case Chunk3DS.MAT_WIRE_SIZE:
+							wireSize = r.readFloat(cp1);
+						break;
+					case Chunk3DS.MAT_TEXMAP:
+							texture1Map.read(model,r,cp1);
+						break;
+					case Chunk3DS.MAT_TEXMASK:
+							texture1Mask.read(model,r,cp1);
+						break;
+					case Chunk3DS.MAT_TEX2MAP:
+							texture2Map.read(model,r,cp1);
+						break;
+					case Chunk3DS.MAT_TEX2MASK:
+							texture2Mask.read(model,r,cp1);
+						break;
+					case Chunk3DS.MAT_OPACMAP:
+							opacityMap.read(model,r,cp1);
+						break;
+					case Chunk3DS.MAT_OPACMASK:
+							opacityMask.read(model,r,cp1);
+						break;
+					case Chunk3DS.MAT_BUMPMAP:
+							bumpMap.read(model,r,cp1);
+						break;
+					case Chunk3DS.MAT_BUMPMASK:
+							bumpMask.read(model,r,cp1);
+						break;
+					case Chunk3DS.MAT_SPECMAP:
+							specularMap.read(model,r,cp1);
+						break;
+					case Chunk3DS.MAT_SPECMASK:
+							specularMask.read(model,r,cp1);
+						break;
+					case Chunk3DS.MAT_SHINMAP:
+							shininessMap.read(model,r,cp1);
+						break;
+					case Chunk3DS.MAT_SHINMASK:
+							shininessMask.read(model,r,cp1);
+						break;
+					case Chunk3DS.MAT_SELFIMAP:
+							selfIllumMap.read(model,r,cp1);
+						break;
+					case Chunk3DS.MAT_SELFIMASK:
+							selfIllumMask.read(model,r,cp1);
+						break;
+					case Chunk3DS.MAT_REFLMAP:
+							reflectionMap.read(model,r,cp1);
+						break;
+					case Chunk3DS.MAT_REFLMASK:
+							reflectionMask.read(model,r,cp1);
+						break;
+					case Chunk3DS.MAT_ACUBIC:
+							cp1.skip(1);
+							autoReflMapAntiAlias = r.readS8(cp1);
+							autoReflMapFlags = r.readS16(cp1);
+							autoReflMapSize = r.readS32(cp1);
+							autoReflMapFrameStep = r.readS32(cp1);
+						break;
+				}
+			}
 		}
 		
 	}
