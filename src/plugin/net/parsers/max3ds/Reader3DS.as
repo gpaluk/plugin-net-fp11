@@ -28,10 +28,12 @@ package plugin.net.parsers.max3ds
 		
 		public static const MAX_FILESIZE: int = int.MAX_VALUE;
 		
-		private var _buffer: ByteArray;
-		private var _length: int;
+		public var name: String;
+		public var length: int;
 		
-		public function Reader3DS( data: ByteArray  )
+		private var _buffer: ByteArray;
+		
+		public function Reader3DS( name: String, data: ByteArray  )
 		{
 			if ( MAX_FILESIZE < data.length )
 			{
@@ -39,8 +41,9 @@ package plugin.net.parsers.max3ds
 			}
 			else
 			{
+				this.name = name;
+				this.length = data.length;
 				_buffer = data;
-				_length = data.length;
 			}
 		}
 		
@@ -187,7 +190,7 @@ package plugin.net.parsers.max3ds
 		
 		public function start(): Chunk3DS
 		{
-			var boot: Chunk3DS = Chunk3DS.createFromLength( _length );
+			var boot: Chunk3DS = Chunk3DS.createFromLength( length );
 			var start: int = 0;
 			var id: int = readU16( boot );
 			var length: int = readS32( boot );

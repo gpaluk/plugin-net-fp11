@@ -61,15 +61,15 @@ package plugin.net.parsers.max3ds.types
 		
 		private var _count: int;
 		
-		public function Model3DS( source: ByteArray ) 
+		public function Model3DS( name: String, source: ByteArray ) 
 		{
-			var r: Reader3DS = new Reader3DS( source );
-			// TODO reader.name etc
+			this.name = name;
+			
+			var r: Reader3DS = new Reader3DS( name, source );
 			try {
-				// read( r );
-				// TODO implement read
+				read( r );
 			}
-			catch ( e:Error )
+			catch ( e: Error )
 			{
 				trace( "An error occured" );
 			}
@@ -108,28 +108,28 @@ package plugin.net.parsers.max3ds.types
 		
 		public function get indices(): int
 		{
-			return indices; 
+			return _indices; 
 		}
 		
 		
 		protected function addMesh( mesh: Mesh3DS ): void
 		{
-			
+			this.mesh.push( mesh );
 		}
 		
 		protected function addCamera( camera: Camera3DS ): void
 		{
-			
+			this.camera.push( camera );
 		}
 		
 		protected function addMaterial( material: Material3DS ): void
 		{
-			
+			this.material.push( material );
 		}
 		
 		protected function addLight( light3DS: Light3DS ): void
 		{
-			
+			this.light.push( light3DS );
 		}
 		
 		public function get numMesh(): int
