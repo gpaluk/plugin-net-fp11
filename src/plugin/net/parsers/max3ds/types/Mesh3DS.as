@@ -18,6 +18,7 @@
 package plugin.net.parsers.max3ds.types 
 {
 	import flash.utils.ByteArray;
+	import io.plugin.core.interfaces.IDisposable;
 	import plugin.net.parsers.max3ds.Chunk3DS;
 	import plugin.net.parsers.max3ds.enum.Map3DSType;
 	import plugin.net.parsers.max3ds.Reader3DS;
@@ -25,7 +26,7 @@ package plugin.net.parsers.max3ds.types
 	 * ...
 	 * @author Gary Paluk
 	 */
-	public class Mesh3DS 
+	public class Mesh3DS implements IDisposable
 	{
 		
 		public var name: String;
@@ -63,7 +64,7 @@ package plugin.net.parsers.max3ds.types
 			read( model, r, cp );
 		}
 		
-		public function reset(): void
+		public function dispose(): void
 		{
 			bounds = null;
 			normals = null;
@@ -212,6 +213,7 @@ package plugin.net.parsers.max3ds.types
 				}
 			}
 			
+			//TODO matrix determinant
 			trace( "WARNING matrix determinant not yet implemented!" );
 		}
 		

@@ -17,11 +17,12 @@
  */
 package plugin.net.parsers.max3ds.types 
 {
+	import io.plugin.core.interfaces.IDisposable;
 	/**
 	 * ...
 	 * @author Gary Paluk
 	 */
-	public class Box3DS 
+	public class Box3DS implements IDisposable
 	{
 		
 		public var min: Array = [];
@@ -42,7 +43,7 @@ package plugin.net.parsers.max3ds.types
 			}
 		}
 		
-		public function reset(): void
+		public function dispose(): void
 		{
 			center = null;
 		}

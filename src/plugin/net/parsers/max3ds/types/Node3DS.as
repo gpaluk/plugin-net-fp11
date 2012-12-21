@@ -17,6 +17,7 @@
  */
 package plugin.net.parsers.max3ds.types 
 {
+	import io.plugin.core.interfaces.IComparable;
 	import plugin.net.parsers.max3ds.Chunk3DS;
 	import plugin.net.parsers.max3ds.enum.Node3DSType;
 	import plugin.net.parsers.max3ds.Reader3DS;
@@ -25,7 +26,7 @@ package plugin.net.parsers.max3ds.types
 	 * ...
 	 * @author Gary Paluk
 	 */
-	public class Node3DS
+	public class Node3DS implements IComparable
 	{
 		
 		public var type: Node3DSType;
