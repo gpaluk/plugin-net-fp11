@@ -29,12 +29,12 @@ package plugin.net.parsers.max3ds.types
 	{
 		
 		public var type: Node3DSType;
-		public var userID: int = 65535;
+		public var userId: int = 65535;
 		public var userPtr: Object;
 		public var next: Node3DS;
 		public var childs: Node3DS;
 		public var parent: Node3DS;
-		public var nodeID: int = 65535;
+		public var nodeId: int = 65535;
 		public var name: String;
 		public var flags: int;
 		public var matrix: Array = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]];
@@ -52,13 +52,13 @@ package plugin.net.parsers.max3ds.types
 				switch( cp1.id )
 				{
 					case Chunk3DS.NODE_ID:
-							nodeID = r.readU16( cp1 );
+							nodeId = r.readU16( cp1 );
 						break;
 					case Chunk3DS.NODE_HDR:
 							name = r.readString( cp1 );
 							flags = r.readU16( cp1 );
 							flags |= (r.readU16( cp1 ) << 16 );
-							userID = r.readU16( cp1 );
+							userId = r.readU16( cp1 );
 						break;
 					case Chunk3DS.PIVOT:
 							if ( type is Node3DSType.MESH_INSTANCE )
@@ -201,6 +201,28 @@ package plugin.net.parsers.max3ds.types
 							}
 						break;
 				}
+			}
+		}
+		
+		public final function compareTo( o: Object ): int
+		{
+			if ( !(o is Node3DS) )
+			{
+				throw new Error( "An error occured in Node3DS::compareTo(). Object type mismatch." );
+			}
+			
+			var node: Node3DS = o as Node3DS;
+			if ( nodeId == node.nodeId )
+			{
+				return 0;
+			}
+			else if( nodeId < node.nodeId )
+			{
+				return -1;
+			}
+			else
+			{
+				return 1;
 			}
 		}
 	}

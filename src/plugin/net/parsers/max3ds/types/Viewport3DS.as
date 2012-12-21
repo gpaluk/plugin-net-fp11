@@ -78,6 +78,8 @@ package plugin.net.parsers.max3ds.types
 										if ( cur < LAYOUT_MAX_VIEWS )
 										{
 											cp1.skip( 4 );
+											
+											//TODO add layoutViews
 											//layoutViews = 
 											
 											layoutViews[ cur ].axisLock = r.readU16( cp1 );
