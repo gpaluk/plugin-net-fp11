@@ -35,6 +35,16 @@ package plugin.net.parsers.max3ds.types
 			
 		}
 		
+		public static function createQuantity( numFaces: int ): Array
+		{
+			var faces: Array = new Array( numFaces );
+			for ( var i: int = 0; i < numFaces; ++i )
+			{
+				faces[ i ] = new Face3DS();
+			}
+			return faces;
+		}
+		
 	}
 
 }

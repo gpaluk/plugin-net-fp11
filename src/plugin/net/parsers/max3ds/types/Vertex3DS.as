@@ -34,6 +34,21 @@ package plugin.net.parsers.max3ds.types
 			return [ 0, 0, 0 ];
 		}
 		
+		public static function resizeFloat( v: Array, z: int ): Array
+		{
+			for ( var i: int = 0; i < v.length; ++i )
+			{
+				v[ i ].lenght = z;
+			}
+			return v;
+		}
+		
+		public static function resizeInt( v: Array, z: int ): Array
+		{
+			v.length = z;
+			return v;
+		}
+		
 	}
 
 }
