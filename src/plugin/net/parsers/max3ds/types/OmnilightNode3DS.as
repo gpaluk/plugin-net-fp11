@@ -26,8 +26,8 @@ package plugin.net.parsers.max3ds.types
 	public class OmnilightNode3DS extends Node3DS 
 	{
 		
-		public var pos: Vertex3DS.create();
-		public var color: Color3DS.create();
+		public var pos: Array = Vertex3DS.create();
+		public var color: Array = Color3DS.create();
 		public var posTrack: Track3DS = new Track3DS( Track3DSType.VECTOR );
 		public var colorTrack: Track3DS = new Track3DS( Track3DSType.VECTOR );
 		

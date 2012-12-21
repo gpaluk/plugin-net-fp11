@@ -39,9 +39,16 @@ package plugin.net.parsers.max3ds.enum
 			_flag = flag;
 		}
 		
-		public function get flag():int 
+		[Inline]
+		public final function get flag():int 
 		{
 			return _flag;
+		}
+		
+		[Inline]
+		public final function set flag(value:int):void 
+		{
+			_flag = value;
 		}
 		
 	}

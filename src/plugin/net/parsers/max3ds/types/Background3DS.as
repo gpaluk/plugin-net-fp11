@@ -50,7 +50,7 @@ package plugin.net.parsers.max3ds.types
 						bitmapName = r.readString( cp1 );
 					break;
 				case Chunk3DS.SOLID_BGND:
-						var lin: Boolean = false;
+						var lin0: Boolean = false;
 						while ( cp1.inside() )
 						{
 							var cp2: Chunk3DS = r.next( cp1 );
@@ -58,7 +58,7 @@ package plugin.net.parsers.max3ds.types
 							{
 								case Chunk3DS.LIN_COLOR_F:
 										r.readColor( cp2, solidColor );
-										lin = true;
+										lin0 = true;
 									break;
 								case Chunk3DS.COLOR_F:
 										r.readColor( cp2, solidColor );
@@ -86,11 +86,11 @@ package plugin.net.parsers.max3ds.types
 							}
 						}
 						
-						var lin: int = 0;
+						var lin1: int = 0;
 						gradientPercent = r.readFloat( cp1 );
 						while ( cp1.inside() )
 						{
-							var cp2: Chunk3DS = r.next( cp1 );
+							cp2 = r.next( cp1 );
 							switch( cp2.id )
 							{
 								case Chunk3DS.COLOR_F:
@@ -100,15 +100,15 @@ package plugin.net.parsers.max3ds.types
 								case Chunk3DS.LIN_COLOR_F:
 										r.readColor( cp2, col[ 1 ][ index[ 1 ]] );
 										index[ 1 ]++;
-										lin = 1;
+										lin1 = 1;
 									break;
 							}
 						}
-						for ( i = 0; i < 3; ++i )
+						for ( var i: int = 0; i < 3; ++i )
 						{
-							gradientTop[ i ] = col[ lin ][ 0 ][ i ];
-							gradientMiddle[ i ] = col[ lin ][ 1 ][ i ];
-							gradientBottom[ i ] = col[ lin ][ 2 ][ i ];
+							gradientTop[ i ] = col[ lin1 ][ 0 ][ i ];
+							gradientMiddle[ i ] = col[ lin1 ][ 1 ][ i ];
+							gradientBottom[ i ] = col[ lin1 ][ 2 ][ i ];
 						}
 					break;
 				case Chunk3DS.USE_BIT_MAP:

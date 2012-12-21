@@ -52,12 +52,12 @@ package plugin.net.parsers.max3ds.types
 		public var viewport: Viewport3DS;
 		public var shadow: Shadow3DS;
 		
-		private var bounds: Box3DS;
-		private var vertices: Array = []; // 2d
-		private var normals: Array = []; // 2d
-		private var indices: int;
-		private var fvVertices: ByteArray;
-		private var fvNormals: ByteArray;
+		private var _bounds: Box3DS;
+		private var _vertices: Array = []; // 2d
+		private var _normals: Array = []; // 2d
+		private var _indices: int;
+		private var _fvVertices: ByteArray;
+		private var _fvNormals: ByteArray;
 		
 		private var _count: int;
 		
@@ -66,7 +66,8 @@ package plugin.net.parsers.max3ds.types
 			var r: Reader3DS = new Reader3DS( source );
 			// TODO reader.name etc
 			try {
-				read( r );
+				// read( r );
+				// TODO implement read
 			}
 			catch ( e:Error )
 			{
@@ -76,11 +77,11 @@ package plugin.net.parsers.max3ds.types
 		
 		public function dispose(): void
 		{
-			bounds = null;
-			vertices = null;
-			normals = null;
-			fvVertices = null;
-			fvNormals = null;
+			_bounds = null;
+			_vertices = null;
+			_normals = null;
+			_fvVertices = null;
+			_fvNormals = null;
 			for each( var m: Mesh3DS in mesh )
 			{
 				m.dispose();
@@ -89,12 +90,12 @@ package plugin.net.parsers.max3ds.types
 		
 		public function get bounds(): Box3DS
 		{
-			var bounds: Box3DS = this.bounds;
+			var bounds: Box3DS = _bounds;
 			if ( null == bounds )
 			{
-				bounds: Box3DS = new Box3DS( true );
-				this.bounds = bounds;
-				for ( var cc: int = 0, _count = mesh.length; cc < _count; ++cc )
+				bounds = new Box3DS( true );
+				_bounds = bounds;
+				for ( var cc: int = 0, _count: int = mesh.length; cc < _count; ++cc )
 				{
 					var m: Mesh3DS = mesh[ cc ];
 					var mb: Box3DS = m.bounds;
@@ -173,7 +174,7 @@ package plugin.net.parsers.max3ds.types
 		
 		public function indexOfMeshByName( name: String ): int
 		{
-			for ( var:int = 0; i < mesh.length; ++i )
+			for ( var i: int = 0; i < mesh.length; ++i )
 			{
 				if ( mesh[ i ].name == name )
 				{
@@ -223,7 +224,7 @@ package plugin.net.parsers.max3ds.types
 			throw new Error( "Camera not found with name: " + name + "." );
 		}
 		
-		public function indexOfCameraByName( name: String ): Camera3DS
+		public function indexOfCameraByName( name: String ): int
 		{
 			for ( var i: int = 0; i < camera.length; ++i )
 			{
@@ -277,7 +278,7 @@ package plugin.net.parsers.max3ds.types
 			throw new Error( "Material not found with name: " + name + "." );
 		}
 		
-		public function indexOfMaterialByName( name: String ): Material3DS
+		public function indexOfMaterialByName( name: String ): int
 		{
 			for ( var i: int = 0; i < material.length; ++i )
 			{
@@ -329,7 +330,7 @@ package plugin.net.parsers.max3ds.types
 			throw new Error( "Light not found with name: " + name + "." );
 		}
 		
-		public function indexOfLightByName( name: String ): Light3DS
+		public function indexOfLightByName( name: String ): int
 		{
 			for ( var i: int = 0; i < light.length; ++i )
 			{
@@ -402,7 +403,7 @@ package plugin.net.parsers.max3ds.types
 										break;
 									case Chunk3DS.BIT_MAP:
 									case Chunk3DS.SOLID_BGND:
-									case Chunk3DS.V_GRADIENT;
+									case Chunk3DS.V_GRADIENT:
 									case Chunk3DS.USE_BIT_MAP:
 									case Chunk3DS.USE_SOLID_BGND:
 									case Chunk3DS.USE_V_GRADIENT:
@@ -440,7 +441,7 @@ package plugin.net.parsers.max3ds.types
 								var numNodes: int = 0;
 								while ( cp1.inside() )
 								{
-									var cp2: Chunk3DS = r.next( cp1 );
+									cp2 = r.next( cp1 );
 									switch( cp2.id )
 									{
 										case Chunk3DS.KFHDR:
@@ -495,7 +496,7 @@ package plugin.net.parsers.max3ds.types
 														break;
 												}
 												node.nodeId = numNodes++;
-												if ( null = last )
+												if ( null == last )
 												{
 													last.next = node;
 												}

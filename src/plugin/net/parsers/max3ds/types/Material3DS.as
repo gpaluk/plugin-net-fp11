@@ -83,7 +83,7 @@ package plugin.net.parsers.max3ds.types
 			read( model, r, cp );
 		}
 		
-		public function read( model: Model3DS, r: Reader3DS, cp: Chunk3DS )
+		public function read( model: Model3DS, r: Reader3DS, cp: Chunk3DS ): void
 		{
 			while ( cp.inside() )
 			{

@@ -124,7 +124,7 @@ package plugin.net.parsers.max3ds
 			c[ 2 ] = readFloat( cp );
 		}
 		
-		public function readPercentage( cp: Chunk3DS, defaultValue: Number ): Number
+		public function readPercentageS16( cp: Chunk3DS, defaultValue: Number ): Number
 		{
 			while ( cp.inside() )
 			{

@@ -89,7 +89,7 @@ package plugin.net.parsers.max3ds.types
 						
 						while ( cp1.inside() )
 						{
-							var cp2: Chunk3DS  = r.next( cp1 );
+							cp2  = r.next( cp1 );
 							switch( cp2.id )
 							{
 								case Chunk3DS.LIN_COLOR_F:
@@ -97,6 +97,7 @@ package plugin.net.parsers.max3ds.types
 										lin = true;
 									break;
 								case Chunk3DS.COLOR_F:
+										//TODO if(!lin)...
 										r.readColor( cp2, layerFogColor );
 									break;
 							}
@@ -110,7 +111,7 @@ package plugin.net.parsers.max3ds.types
 						
 						while ( cp1.inside() )
 						{
-							var cp2: Chunk3DS = r.next( cp1 );
+							cp2 = r.next( cp1 );
 							switch( cp2.id )
 							{
 								case Chunk3DS.DCUE_BGND:

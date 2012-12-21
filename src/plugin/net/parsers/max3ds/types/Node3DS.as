@@ -62,25 +62,25 @@ package plugin.net.parsers.max3ds.types
 							userId = r.readU16( cp1 );
 						break;
 					case Chunk3DS.PIVOT:
-							if ( type is Node3DSType.MESH_INSTANCE )
+							if ( type == Node3DSType.MESH_INSTANCE )
 							{
-								var n:MeshInstanceNode3DS = MeshInstanceNode3DS( this );
-								r.readVector(cp1, n.pivot );
+								var n0:MeshInstanceNode3DS = MeshInstanceNode3DS( this );
+								r.readVector(cp1, n0.pivot );
 							}
 						break;
 					case Chunk3DS.INSTANCE_NAME:
-							if ( type is Node3DSType.MESH_INSTANCE )
+							if ( type == Node3DSType.MESH_INSTANCE )
 							{
-								var n: MeshInstanceNode3DS = MeshInstanceNode3DS( this );
-								n.instanceName = r.readString( cp1 );
+								var n1: MeshInstanceNode3DS = MeshInstanceNode3DS( this );
+								n1.instanceName = r.readString( cp1 );
 							}
 						break;
 					case Chunk3DS.BOUNDBOX:
-							if ( type is Node3DSType.MESH_INSTANCE )
+							if ( type == Node3DSType.MESH_INSTANCE )
 							{
-								var n: MeshInstanceNode3DS = MeshInstanceNode3DS( this );
-								r.readVector( cp1, n.bBoxMin );
-								r.readVector( cp1, b.bBoxMax );
+								var n2: MeshInstanceNode3DS = MeshInstanceNode3DS( this );
+								r.readVector( cp1, n2.bBoxMin );
+								r.readVector( cp1, n2.bBoxMax );
 							}
 						break;
 					case Chunk3DS.COL_TRACK_TAG:
@@ -88,16 +88,16 @@ package plugin.net.parsers.max3ds.types
 							switch( type )
 							{
 								case Node3DSType.AMBIENT_COLOR:
-										var n: AmbientColorNode3DS = AmbientColorNode3DS( this );
-										track = n.colorTrack;
+										var n3: AmbientColorNode3DS = AmbientColorNode3DS( this );
+										track = n3.colorTrack;
 									break;
 								case Node3DSType.OMNILIGHT.type:
-										var n: OmnilightNode3DS = OmnilightNode3DS( this );
-										track = n.colorTrack;
+										var n4: OmnilightNode3DS = OmnilightNode3DS( this );
+										track = n4.colorTrack;
 									break;
 								case Node3DSType.SPOTLIGHT.type:
-										var n: SpotlightNode3DS = SpotlightNode3DS( this );
-										track = n.colorTrack;
+										var n5: SpotlightNode3DS = SpotlightNode3DS( this );
+										track = n5.colorTrack;
 									break;
 							}
 							if ( null != track )
@@ -106,32 +106,32 @@ package plugin.net.parsers.max3ds.types
 							}
 						break;
 					case Chunk3DS.POS_TRACK_TAG:
-							var track: Track3DS = null;
+							track = null;
 							switch( type )
 							{
 								case Node3DSType.MESH_INSTANCE:
-										var n: MeshInstanceNode3DS = MeshInstanceNode3DS( this );
-										track = n.posTrack;
+										var n6: MeshInstanceNode3DS = MeshInstanceNode3DS( this );
+										track = n6.posTrack;
 									break;
 								case Node3DSType.CAMERA:
-										var n: CameraNode3DS = CameraNode3DS( this );
-										track = n.posTrack;
+										var n7: CameraNode3DS = CameraNode3DS( this );
+										track = n7.posTrack;
 									break;
 								case Node3DSType.CAMERA_TARGET:
-										var n: TargetNode3DS = TargetNode3DS( this );
-										track = n.posTrack;
+										var n8: TargetNode3DS = TargetNode3DS( this );
+										track = n8.posTrack;
 									break;
 								case Node3DSType.OMNILIGHT:
-										var n: OmnilightNode3DS = OmnilightNode3DS( this );
-										track = n.posTrack;
+										var n9: OmnilightNode3DS = OmnilightNode3DS( this );
+										track = n9.posTrack;
 									break;
 								case Node3DSType.SPOTLIGHT:
-										var n: SpotlightNode3DS = SpotlightNode3DS( this );
-										track = n.posTrack;
+										var n10: SpotlightNode3DS = SpotlightNode3DS( this );
+										track = n10.posTrack;
 									break;
 								case Node3DSType.SPOTLIGHT_TARGET:
-										var n: TargetNode3DS = TargetNode3DS( this );
-										track = n.posTrack;
+										var n11: TargetNode3DS = TargetNode3DS( this );
+										track = n11.posTrack;
 									break;
 							}
 							if ( null != track )
@@ -142,63 +142,63 @@ package plugin.net.parsers.max3ds.types
 					case Chunk3DS.ROT_TRACK_TAG:
 							if( type == Node3DSType.MESH_INSTANCE )
 							{
-								var n: MeshInstanceNode3DS = MeshInstanceNode3DS( this );
-								n.rotTrack.read( model, t, cp1 );
+								var n12: MeshInstanceNode3DS = MeshInstanceNode3DS( this );
+								n12.rotTrack.read( model, r, cp1 );
 							}
 						break;
 					case Chunk3DS.SCL_TRACK_TAG:
 							if( type == Node3DSType.MESH_INSTANCE )
 							{
-								var n: MeshInstanceNode3DS = MeshInstanceNode3DS( this );
-								n.sclTrack.read( model, t, cp1 );
+								var n13: MeshInstanceNode3DS = MeshInstanceNode3DS( this );
+								n13.sclTrack.read( model, r, cp1 );
 							}
 						break;
 					case Chunk3DS.FOV_TRACK_TAG:
 							if( type == Node3DSType.CAMERA )
 							{
-								var n: CameraNode3DS = CameraNode3DS( this );
-								n.fovTrack.read( model, t, cp1 );
+								var n14: CameraNode3DS = CameraNode3DS( this );
+								n14.fovTrack.read( model, r, cp1 );
 							}
 						break;
 					case Chunk3DS.HOT_TRACK_TAG:
 							if( type == Node3DSType.SPOTLIGHT )
 							{
-								var n: SpotlightNode3DS = SpotlightNode3DS( this );
-								n.hotspotTrack.read( model, r, cp1 );
+								var n15: SpotlightNode3DS = SpotlightNode3DS( this );
+								n15.hotspotTrack.read( model, r, cp1 );
 							}
 						break;
 					case Chunk3DS.FALL_TRACK_TAG:
 							if ( type == Node3DSType.SPOTLIGHT )
 							{
-								var n: SpotlightNode3DS = SpotlightNode3DS( this );
-								n.falloffTrack.read( model, r, cp1 );
+								var n16: SpotlightNode3DS = SpotlightNode3DS( this );
+								n16.falloffTrack.read( model, r, cp1 );
 							}
 						break;
 					case Chunk3DS.ROLL_TRACK_TAG:
 							switch( type )
 							{
 								case Node3DSType.CAMERA:
-										var n: CameraNode3DS = CameraNode3DS( this );
-										n.rollTrack.read( model, r, cp1 );
+										var n17: CameraNode3DS = CameraNode3DS( this );
+										n17.rollTrack.read( model, r, cp1 );
 									break;
 								case Node3DSType.SPOTLIGHT:
-										var n: SpotlightNode3DS = SpotlightNode3DS( this );
-										n.rollTrack.read( model, r, cp1 );
+										var n18: SpotlightNode3DS = SpotlightNode3DS( this );
+										n18.rollTrack.read( model, r, cp1 );
 									break;
 							}
 						break;
 					case Chunk3DS.HIDE_TRACK_TAG:
 							if ( type == Node3DSType.MESH_INSTANCE )
 							{
-								var n: MeshInstanceNode3DS = MeshInstanceNode3DS( this );
-								n.hideTrack.read( model, r, cp1 );
+								var n19: MeshInstanceNode3DS = MeshInstanceNode3DS( this );
+								n19.hideTrack.read( model, r, cp1 );
 							}
 						break;
 					case Chunk3DS.MORPH_SMOOTH:
 							if ( type == Node3DSType.MESH_INSTANCE )
 							{
-								var n: MeshInstanceNode3DS = MeshInstanceNode3DS( this );
-								n.morphSmooth.read( model, r, cp1 );
+								var n20: MeshInstanceNode3DS = MeshInstanceNode3DS( this );
+								n20.morphSmooth = r.readFloat( cp1 );
 							}
 						break;
 				}

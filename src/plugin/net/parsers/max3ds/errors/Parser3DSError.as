@@ -26,7 +26,7 @@ package plugin.net.parsers.max3ds.errors
 	public class Parser3DSError extends Event 
 	{
 		
-		public function Parser3DSError(type:String, bubbles:Boolean=false, cancelable:Boolean=false) 
+		public function Parser3DSError(type:String = "", bubbles:Boolean=false, cancelable:Boolean=false) 
 		{ 
 			super(type, bubbles, cancelable);
 		} 

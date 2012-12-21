@@ -102,14 +102,14 @@ package plugin.net.parsers.max3ds.types
 							{
 								vFlags = Vertex3DS.resizeInt( vFlags, count );
 							}
-							for ( var i: int = 0; i < count; ++i )
+							for ( i = 0; i < count; ++i )
 							{
 								r.readVector( cp2, vertices[ i ] );
 							}
 						break;
 					case Chunk3DS.POINT_FLAG_ARRAY:
 							var nFlags: int = r.readU16( cp2 );
-							var count: int = ( vertices.length >= nFlags ) ? vertices.length : nFlags;
+							count = ( vertices.length >= nFlags ) ? vertices.length : nFlags;
 							vertices = Vertex3DS.resizeInt( vertices, count );
 							if ( 0 != texcos.length )
 							{
@@ -117,7 +117,7 @@ package plugin.net.parsers.max3ds.types
 							}
 							//TODO check this line
 							vFlags = Vertex3DS.resizeInt( vFlags, count );
-							for ( var i: int = 0; i < nFlags; ++i )
+							for ( i = 0; i < nFlags; ++i )
 							{
 								vFlags[ i ] = r.readU16( cp2 );
 							}
@@ -131,7 +131,7 @@ package plugin.net.parsers.max3ds.types
 								face.index[ 0 ] = r.readU16( cp2 );
 								face.index[ 1 ] = r.readU16( cp2 );
 								face.index[ 2 ] = r.readU16( cp2 );
-								face.flags = r.readU16( cp2 );
+								face.flags.flag = r.readU16( cp2 );
 							}
 							while ( cp2.inside() )
 							{
@@ -140,9 +140,9 @@ package plugin.net.parsers.max3ds.types
 								{
 									case Chunk3DS.MSH_MAT_GROUP:
 											var name:String = r.readString( cp3 );
-											var material: int = model.indexOfMaterialForName( name );
+											var material: int = model.indexOfMaterialByName( name );
 											var n: int = r.readU16( cp3 );
-											for ( var cc: int = 0; cc < n; ++cc )
+											for ( cc = 0; cc < n; ++cc )
 											{
 												var index: int = r.readU16( cp3 );
 												if ( index < nFaces )
@@ -152,7 +152,7 @@ package plugin.net.parsers.max3ds.types
 											}
 										break;
 									case Chunk3DS.SMOOTH_GROUP:
-											for ( var i: int = 0; i < nFaces; ++i )
+											for ( i = 0; i < nFaces; ++i )
 											{
 												faces[ i ].smoothingGroup = r.readS32( cp3 );
 											}
@@ -171,25 +171,25 @@ package plugin.net.parsers.max3ds.types
 					case Chunk3DS.MESH_TEXTURE_INFO:
 							//FIXME: this.mapType = r.readU16(cp2);
 							
-							for ( var i: int = 0; i < 2; ++i )
+							for ( i = 0; i < 2; ++i )
 							{
 								mapTile[ i ] = r.readFloat( cp2 );
 							}
-							for ( var i: int = 0; i < 3; ++i )
+							for ( i = 0; i < 3; ++i )
 							{
 								mapPos[ i ] = r.readFloat( cp2 );
 							}
 							mapScale = r.readFloat( cp2 );
 							
 							mapMatrix = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
-							for ( var i: int = 0; i < 4; ++i )
+							for ( i = 0; i < 4; ++i )
 							{
-								for ( var j: int = 0; j < 3; ++j )
+								for ( j = 0; j < 3; ++j )
 								{
 									mapMatrix[ i ][ j ] = r.readFloat( cp2 );
 								}
 							}
-							for ( var i: int = 0; i < 2; ++i )
+							for ( i = 0; i < 2; ++i )
 							{
 								mapPlanarSize[ i ] = r.readFloat( cp2 );
 							}
@@ -198,11 +198,11 @@ package plugin.net.parsers.max3ds.types
 						break;
 					case Chunk3DS.TEX_VERTS:
 							var nTexcos: int = r.readU16( cp2 );
-							var count: int = ( vertices.length >= nTexcos) ? vertices.length  : nTexcos;
+							count = ( vertices.length >= nTexcos) ? vertices.length  : nTexcos;
 							vertices = Vertex3DS.resizeInt( vertices, count );
 							texcos = Vertex3DS.resizeInt( texcos, count );
 							vFlags = Vertex3DS.resizeInt( vFlags, count );
-							for ( var cc: int = 0; cc < nTexcos; ++cc )
+							for ( cc = 0; cc < nTexcos; ++cc )
 							{
 								var texcos: Array = this.texcos[ cc ];
 								texcos[ 0 ] = r.readFloat( cp2 );

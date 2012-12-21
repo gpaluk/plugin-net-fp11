@@ -18,7 +18,7 @@
 package plugin.net.parsers.max3ds.types 
 {
 	import plugin.net.parsers.max3ds.Chunk3DS;
-	import plugin.net.parsers.max3ds.Constants;
+	import plugin.net.parsers.max3ds.Constants3DS;
 	import plugin.net.parsers.max3ds.Reader3DS;
 	/**
 	 * ...
@@ -57,7 +57,7 @@ package plugin.net.parsers.max3ds.types
 			roll = r.readFloat( cp );
 			var s: Number = r.readFloat( cp );
 			
-			if ( Constants.VECTOR_EPSILON > Math.abs( s ) )
+			if ( Constants3DS.VECTOR_EPSILON > Math.abs( s ) )
 			{
 				fov = 45;
 			}

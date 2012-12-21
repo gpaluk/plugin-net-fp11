@@ -45,7 +45,7 @@ package plugin.net.parsers.max3ds.types
 		{
 			frame = r.readS32( cp );
 			flags = r.readU16( cp );
-			if ( 0 != (flags & Key3DSFlags.USE_TENS.flag ) )
+			if ( 0 != ( flags & Key3DSFlags.USE_TENS.flag ) )
 			{
 				tens = r.readFloat( cp );
 			}
@@ -57,11 +57,11 @@ package plugin.net.parsers.max3ds.types
 			{
 				bias = r.readFloat( cp );
 			}
-			if ( 0 != ( flags & Key3DSFlags.USE_EASE_TO ) )
+			if ( 0 != ( flags & Key3DSFlags.USE_EASE_TO.flag ) )
 			{
 				easeTo = r.readFloat( cp );
 			}
-			if ( 0 != ( flags & Key3DSFlags.USE_EASE_FROM ) )
+			if ( 0 != ( flags & Key3DSFlags.USE_EASE_FROM.flag ) )
 			{
 				easeFrom = r.readFloat( cp );
 			}

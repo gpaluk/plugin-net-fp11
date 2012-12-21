@@ -104,7 +104,7 @@ package plugin.net.parsers.max3ds.types
 				case Chunk3DS.DEFAULT_VIEW:
 						while ( cp.inside() )
 						{
-							var cp1: Chunk3DS = r.next( cp );
+							cp1 = r.next( cp );
 							switch( cp1.id )
 							{
 								case Chunk3DS.VIEW_TOP:
