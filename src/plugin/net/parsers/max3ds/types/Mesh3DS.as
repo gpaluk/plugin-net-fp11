@@ -1,3 +1,20 @@
+/*
+ * Plugin.IO - http://www.plugin.io
+ * Copyright (c) 2012
+ * 
+ * This program is free  software: you can redistribute it and/or modify 
+ * it under the terms of the GNU Lesser General Public License as published 
+ * by the Free Software Foundation, either version 3 of the License, or 
+ * (at your option) any later version.
+ * 
+ * This program  is  distributed in the hope that it will be useful, 
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+ * GNU Lesser General Public License for more details.
+ * 
+ * You should  have received a copy of the GNU Lesser General Public License
+ * along with  this program; If not, see <http://www.gnu.org/licenses/>. 
+ */
 package plugin.net.parsers.max3ds.types 
 {
 	import flash.utils.ByteArray;
@@ -91,7 +108,7 @@ package plugin.net.parsers.max3ds.types
 						break;
 					case Chunk3DS.POINT_FLAG_ARRAY:
 							var nFlags: int = r.readU16( cp2 );
-							var count: int = ((vertices.length >= nFlags) ? (vertices.length) : (nFlags ) );
+							var count: int = ( vertices.length >= nFlags ) ? vertices.length : nFlags;
 							vertices = Vertex3DS.resizeInt( vertices, count );
 							if ( 0 != texcos.length )
 							{
@@ -180,7 +197,7 @@ package plugin.net.parsers.max3ds.types
 						break;
 					case Chunk3DS.TEX_VERTS:
 							var nTexcos: int = r.readU16( cp2 );
-							var count: int = (( vertices.length >= nTexcos)?(vertices.length ):(nTexcos));
+							var count: int = ( vertices.length >= nTexcos) ? vertices.length  : nTexcos;
 							vertices = Vertex3DS.resizeInt( vertices, count );
 							texcos = Vertex3DS.resizeInt( texcos, count );
 							vFlags = Vertex3DS.resizeInt( vFlags, count );
