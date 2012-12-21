@@ -1,6 +1,8 @@
 /*
+ * Copyright (c) 2012 by Gary Paluk, all rights reserved.
  * Plugin.IO - http://www.plugin.io
- * Copyright (c) 2012
+ * 
+ * Copyright (c) 1996-2008 by Jan Eric Kyprianidis, all rights reserved.
  * 
  * This program is free  software: you can redistribute it and/or modify 
  * it under the terms of the GNU Lesser General Public License as published 
