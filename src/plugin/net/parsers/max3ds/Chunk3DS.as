@@ -287,7 +287,7 @@ package plugin.net.parsers.max3ds
 		
 		public function skip( p: int ): void
 		{
-			this.pos += p;
+			pos += p;
 		}
 		
 	}

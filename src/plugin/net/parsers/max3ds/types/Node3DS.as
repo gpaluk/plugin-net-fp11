@@ -139,7 +139,7 @@ package plugin.net.parsers.max3ds.types
 										track = n11.posTrack;
 									break;
 							}
-							if ( null != track )
+							if ( track )
 							{
 								track.read( model, r, cp1 );
 							}
@@ -206,9 +206,13 @@ package plugin.net.parsers.max3ds.types
 								n20.morphSmooth = r.readFloat( cp1 );
 							}
 						break;
+						
+					//TODO Chunk3DS.MORPH_TRACK_TAG
 				}
 			}
 		}
+		
+		// TODO lists
 		
 		public final function compareTo( o: Object ): int
 		{

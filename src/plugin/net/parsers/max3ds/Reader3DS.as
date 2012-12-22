@@ -38,6 +38,8 @@ package plugin.net.parsers.max3ds
 		
 		public function Reader3DS( name: String, data: ByteArray  )
 		{
+			_buffer = data;
+			
 			if ( MAX_FILESIZE < data.length )
 			{
 				throw new Parser3DSError( "Size of file exceeds practical limits." );
@@ -60,36 +62,41 @@ package plugin.net.parsers.max3ds
 		public function readU8( cp: Chunk3DS ): int
 		{
 			_buffer.position = cp.pos++;
-			return _buffer.readUnsignedByte();
+			return int( _buffer.readUnsignedByte() );
 		}
 		
 		public function readU16( cp: Chunk3DS ): int
 		{
 			_buffer.position = cp.pos++;
-			return _buffer.readUnsignedShort();
+			cp.pos++;
+			return int( _buffer.readUnsignedShort() );
 		}
 		
 		public function readS16( cp: Chunk3DS ): int
 		{
 			_buffer.position = cp.pos++;
+			cp.pos++;
 			return _buffer.readShort();
 		}
 		
 		public function readS32( cp: Chunk3DS ): int
 		{
 			_buffer.position = cp.pos++;
+			cp.pos += 3;
 			return _buffer.readInt();
 		}
 		
 		public function readU32( cp: Chunk3DS ): int
 		{
 			_buffer.position = cp.pos++;
-			return _buffer.readUnsignedInt();
+			cp.pos += 3;
+			return int( _buffer.readUnsignedInt() );
 		}
 		
 		public function readFloat( cp: Chunk3DS ): Number
 		{
 			_buffer.position = cp.pos++;
+			cp.pos += 3;
 			return _buffer.readFloat();
 		}
 		
@@ -98,8 +105,9 @@ package plugin.net.parsers.max3ds
 			var strBuffer: String = "";
 			while ( cp.inside() )
 			{
-				_buffer.position = cp.pos++;
+				_buffer.position = cp.pos;
 				var ch: int = _buffer.readByte();
+				cp.pos++;
 				if ( 0 == ch )
 				{
 					return strBuffer;
