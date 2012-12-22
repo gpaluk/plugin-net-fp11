@@ -38,9 +38,6 @@ package plugin.net.parsers.max3ds
 		
 		public function Reader3DS( name: String, data: ByteArray  )
 		{
-			_buffer = data;
-			_buffer.position = 0;
-			
 			if ( MAX_FILESIZE < data.length )
 			{
 				throw new Parser3DSError( "Size of file exceeds practical limits." );
@@ -50,6 +47,7 @@ package plugin.net.parsers.max3ds
 				this.name = name;
 				this.length = data.length;
 				_buffer = data;
+				_buffer.position = 0;
 			}
 		}
 		
