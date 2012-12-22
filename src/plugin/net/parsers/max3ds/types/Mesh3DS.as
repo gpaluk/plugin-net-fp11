@@ -20,6 +20,7 @@
 package plugin.net.parsers.max3ds.types 
 {
 	import flash.utils.ByteArray;
+	import flash.utils.Endian;
 	import io.plugin.core.interfaces.IDisposable;
 	import plugin.net.parsers.max3ds.Chunk3DS;
 	import plugin.net.parsers.max3ds.enum.Map3DSType;
@@ -31,37 +32,40 @@ package plugin.net.parsers.max3ds.types
 	public class Mesh3DS implements IDisposable
 	{
 		
-		public var name: String;
-		public var userId: int;
-		public var userPtr: Object;
-		public var objectFlags: int;
-		public var color: int;
+		public var name: String = "";
+		public var userId: int = 0;
+		public var userPtr: Object = {};
+		public var objectFlags: int = 0;
+		public var color: int = 0;
 		public var matrix: Array = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
-		public var vertices: Array = [];
-		public var texcos: Array = [];
+		public var vertices: Array = []; //2d
+		public var texcos: Array = []; //2d
 		public var vFlags: Array = [];
 		public var faces: Array = [];
-		public var boxFront: String;
-		public var boxBack: String;
-		public var boxLeft: String;
-		public var boxRight: String;
-		public var boxTop: String;
-		public var boxBottom: String;
+		public var boxFront: String = "";
+		public var boxBack: String = "";
+		public var boxLeft: String = "";
+		public var boxRight: String = "";
+		public var boxTop: String = "";
+		public var boxBottom: String = "";
 		public var mapType: Map3DSType = Map3DSType.NONE;
-		public var mapPos: Array = [ 0, 0, 0 ];
+		public var mapPos: Array = Vertex3DS.create();
 		public var mapMatrix: Array = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
-		public var mapScale: Number;
+		public var mapScale: Number = 0;
 		public var mapTile: Array = [ 0, 0 ];
 		public var mapPlanarSize: Array = [ 0, 0 ];
-		public var mapCylinderHeight: Number;
+		public var mapCylinderHeight: Number = 0;
 		
-		public var bounds: Box3DS;
+		public var bounds: Box3DS = new Box3DS();
 		public var normals:Array = [];
-		public var fvVertices: ByteArray;
-		public var fvNormals: ByteArray;
+		public var fvVertices: ByteArray = new ByteArray();
+		public var fvNormals: ByteArray = new ByteArray();
 		
 		public function Mesh3DS( model: Model3DS, r:Reader3DS, cp:Chunk3DS, name:String ) 
 		{
+			fvVertices.endian = Endian.LITTLE_ENDIAN;
+			fvNormals.endian = Endian.LITTLE_ENDIAN;
+			
 			this.name = name;
 			read( model, r, cp );
 		}
@@ -70,17 +74,22 @@ package plugin.net.parsers.max3ds.types
 		{
 			bounds = null;
 			normals = null;
+			fvVertices.clear();
 			fvVertices = null;
+			fvNormals.clear();
 			fvNormals = null;
 		}
 		
 		public function read( model: Model3DS, r: Reader3DS, cp: Chunk3DS ): void
 		{
+			var cp2: Chunk3DS;
+			var cp3: Chunk3DS;
+			
 			var i: int;
 			var j: int;
 			while ( cp.inside() )
 			{
-				var cp2: Chunk3DS = r.next( cp );
+				cp2 = r.next( cp );
 				switch( cp2.inside() )
 				{
 					case Chunk3DS.MESH_MATRIX:
@@ -127,17 +136,17 @@ package plugin.net.parsers.max3ds.types
 					case Chunk3DS.FACE_ARRAY:
 							var nFaces: int = r.readU16( cp2 );
 							faces = Face3DS.createQuantity( nFaces );
-							for ( var cc: int = 0; cc < nFaces; ++cc )
+							for ( var cc: int = 0; cc < nFaces; cc++ )
 							{
 								var face: Face3DS = faces[ cc ];
 								face.index[ 0 ] = r.readU16( cp2 );
 								face.index[ 1 ] = r.readU16( cp2 );
 								face.index[ 2 ] = r.readU16( cp2 );
-								face.flags.flag = r.readU16( cp2 );
+								face.flags = r.readU16( cp2 );
 							}
 							while ( cp2.inside() )
 							{
-								var cp3: Chunk3DS = r.next( cp2 );
+								cp3 = r.next( cp2 );
 								switch( cp3.id )
 								{
 									case Chunk3DS.MSH_MAT_GROUP:
@@ -184,9 +193,9 @@ package plugin.net.parsers.max3ds.types
 							mapScale = r.readFloat( cp2 );
 							
 							mapMatrix = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
-							for ( i = 0; i < 4; ++i )
+							for ( i = 0; i < 4; i++ )
 							{
-								for ( j = 0; j < 3; ++j )
+								for ( j = 0; j < 3; j++ )
 								{
 									mapMatrix[ i ][ j ] = r.readFloat( cp2 );
 								}
@@ -200,7 +209,7 @@ package plugin.net.parsers.max3ds.types
 						break;
 					case Chunk3DS.TEX_VERTS:
 							var nTexcos: int = r.readU16( cp2 );
-							count = ( vertices.length >= nTexcos) ? vertices.length  : nTexcos;
+							count = ( vertices.length >= nTexcos) ? vertices.length : nTexcos;
 							vertices = Vertex3DS.resizeInt( vertices, count );
 							texcos = Vertex3DS.resizeInt( texcos, count );
 							vFlags = Vertex3DS.resizeInt( vFlags, count );

@@ -33,13 +33,13 @@ package plugin.net.parsers.max3ds.types
 		
 		public var type: Node3DSType;
 		public var userId: int = 65535;
-		public var userPtr: Object;
+		public var userPtr: Object = {};
 		public var next: Node3DS;
 		public var childs: Node3DS;
 		public var parent: Node3DS;
 		public var nodeId: int = 65535;
-		public var name: String;
-		public var flags: int;
+		public var name: String = "";
+		public var flags: int = 0;
 		public var matrix: Array = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]];
 		
 		public function Node3DS( type: Node3DSType ) 
@@ -49,9 +49,12 @@ package plugin.net.parsers.max3ds.types
 		
 		public function read( model:Model3DS, r: Reader3DS, cp: Chunk3DS ): void
 		{
+			var cp1: Chunk3DS;
+			var track: Track3DS;
+			
 			while ( cp.inside() )
 			{
-				var cp1: Chunk3DS = r.next( cp );
+				cp1 = r.next( cp );
 				switch( cp1.id )
 				{
 					case Chunk3DS.NODE_ID:
@@ -86,7 +89,7 @@ package plugin.net.parsers.max3ds.types
 							}
 						break;
 					case Chunk3DS.COL_TRACK_TAG:
-							var track: Track3DS = null;
+							track = null;
 							switch( type )
 							{
 								case Node3DSType.AMBIENT_COLOR:

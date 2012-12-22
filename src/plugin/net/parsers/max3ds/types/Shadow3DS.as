@@ -28,12 +28,12 @@ package plugin.net.parsers.max3ds.types
 	public class Shadow3DS 
 	{
 		
-		public var mapSize: int;
-		public var lowBias: Number;
-		public var hiBias: Number;
-		public var filter: Number;
+		public var mapSize: int = 0;
+		public var lowBias: Number = 0;
+		public var hiBias: Number = 0;
+		public var filter: Number = 0;
 		
-		public var rayBias: Number;
+		public var rayBias: Number = 0;
 		
 		public function Shadow3DS( model: Model3DS, r: Reader3DS, cp: Chunk3DS ) 
 		{

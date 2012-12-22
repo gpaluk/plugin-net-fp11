@@ -29,7 +29,7 @@ package plugin.net.parsers.max3ds.types
 	public class AmbientColorNode3DS extends Node3DS
 	{
 		
-		public var color: Array = [];
+		public var color: Array = Color3DS.create();
 		public var colorTrack: Track3DS = new Track3DS( Track3DSType.VECTOR );
 		
 		public function AmbientColorNode3DS() 

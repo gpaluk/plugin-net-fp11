@@ -28,15 +28,15 @@ package plugin.net.parsers.max3ds.types
 	public class TextureMap3DS 
 	{
 		
-		public var userID: int;
-		public var userPtr: Object;
-		public var name: String;
+		public var userID: int = 0;
+		public var userPtr: Object = {};
+		public var name: String = "";
 		public var flags: int = 0x10;
 		public var percent: Number = 1;
-		public var blur: Number;
+		public var blur: Number = 0;
 		public var scale: Array = [ 1, 1 ];
 		public var offset: Array = [ 0, 0 ];
-		public var rotation: Number;
+		public var rotation: Number = 0;
 		public var tint1: Array = [ 0, 0, 0 ];
 		public var tint2: Array = [ 0, 0, 0 ];
 		public var tintR: Array = [ 0, 0, 0 ];

@@ -28,9 +28,9 @@ package plugin.net.parsers.max3ds.types
 	public class CameraNode3DS extends Node3DS 
 	{
 		
-		public var pos: Array = [];
-		public var fov: Number;
-		public var roll: Number;
+		public var pos: Array = Vertex3DS.create();
+		public var fov: Number = 0;
+		public var roll: Number = 0;
 		public var posTrack: Track3DS = new Track3DS( Track3DSType.VECTOR );
 		public var fovTrack: Track3DS = new Track3DS( Track3DSType.FLOAT );
 		public var rollTrack: Track3DS = new Track3DS( Track3DSType.FLOAT );

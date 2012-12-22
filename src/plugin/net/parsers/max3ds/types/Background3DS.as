@@ -19,24 +19,26 @@
  */
 package plugin.net.parsers.max3ds.types 
 {
+	import io.plugin.core.errors.CloneNotSupportedError;
+	import io.plugin.core.interfaces.ICloneable;
 	import plugin.net.parsers.max3ds.Chunk3DS;
 	import plugin.net.parsers.max3ds.Reader3DS;
 	/**
 	 * ...
 	 * @author Gary Paluk
 	 */
-	public class Background3DS 
+	public class Background3DS implements ICloneable
 	{
 		
-		public var useBitmap: Boolean;
-		public var bitmapName: String;
-		public var useSolid: Boolean;
-		public var solidColor: Array = [ 0, 0, 0 ];
-		public var useGradient: Boolean;
-		public var gradientPercent: Number;
-		public var gradientTop: Array = [ 0, 0, 0 ];
-		public var gradientMiddle: Array = [ 0, 0, 0 ];
-		public var gradientBottom: Array = [ 0, 0, 0 ];
+		public var useBitmap: Boolean = false;
+		public var bitmapName: String = "";
+		public var useSolid: Boolean = false;
+		public var solidColor: Array = Color3DS.create();
+		public var useGradient: Boolean = false;
+		public var gradientPercent: Number = 0;
+		public var gradientTop: Array = Color3DS.create();
+		public var gradientMiddle: Array = Color3DS.create();
+		public var gradientBottom: Array = Color3DS.create();
 		
 		public function Background3DS( model: Model3DS, r:Reader3DS, cp: Chunk3DS ) 
 		{
@@ -46,6 +48,8 @@ package plugin.net.parsers.max3ds.types
 		public function read( model: Model3DS, r: Reader3DS, cp: Chunk3DS ): void
 		{
 			var cp1: Chunk3DS = r.next( cp );
+			var cp2: Chunk3DS;
+			
 			switch( cp1.id )
 			{
 				case Chunk3DS.BIT_MAP:
@@ -55,7 +59,7 @@ package plugin.net.parsers.max3ds.types
 						var lin0: Boolean = false;
 						while ( cp1.inside() )
 						{
-							var cp2: Chunk3DS = r.next( cp1 );
+							cp2 = r.next( cp1 );
 							switch( cp2.id )
 							{
 								case Chunk3DS.LIN_COLOR_F:
@@ -63,6 +67,7 @@ package plugin.net.parsers.max3ds.types
 										lin0 = true;
 									break;
 								case Chunk3DS.COLOR_F:
+										//TODO if(!lin0)...
 										r.readColor( cp2, solidColor );
 									break;
 							}
@@ -71,6 +76,8 @@ package plugin.net.parsers.max3ds.types
 				case Chunk3DS.V_GRADIENT:
 						var index: Array = [ 0, 0 ];
 						var col: Array = [];
+						var lin1: int = 0;
+						gradientPercent = r.readFloat( cp1 );
 						
 						var dim1: int;
 						var dim2: int;
@@ -88,8 +95,6 @@ package plugin.net.parsers.max3ds.types
 							}
 						}
 						
-						var lin1: int = 0;
-						gradientPercent = r.readFloat( cp1 );
 						while ( cp1.inside() )
 						{
 							cp2 = r.next( cp1 );
@@ -123,6 +128,12 @@ package plugin.net.parsers.max3ds.types
 						useGradient = true;
 					break;
 			}
+		}
+		
+		//TODO clone
+		public function clone(): *
+		{
+			throw new CloneNotSupportedError();
 		}
 		
 	}

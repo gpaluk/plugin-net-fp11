@@ -31,15 +31,15 @@ package plugin.net.parsers.max3ds.types
 	{
 		
 		public var pivot: Array = Vertex3DS.create();
-		public var instanceName: String;
+		public var instanceName: String = "";
 		public var bBoxMin: Array = Vertex3DS.create();
 		public var bBoxMax: Array = Vertex3DS.create();
-		public var hide: int;
+		public var hide: int = 0;
 		public var pos: Array = Vertex3DS.create();
 		public var rot: Array = [ 0, 0, 0, 0 ];
 		public var scl: Array = Vertex3DS.create();
-		public var morphSmooth: Number;
-		public var morph: String;
+		public var morphSmooth: Number = 0;
+		public var morph: String = "";
 		public var posTrack: Track3DS = new Track3DS( Track3DSType.VECTOR );
 		public var rotTrack: Track3DS = new Track3DS( Track3DSType.QUAT );
 		public var sclTrack: Track3DS = new Track3DS( Track3DSType.VECTOR );

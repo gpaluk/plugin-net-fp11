@@ -27,9 +27,9 @@ package plugin.net.parsers.max3ds.types
 	public class Box3DS implements IDisposable
 	{
 		
-		public var min: Array = [];
-		public var max: Array = [];
-		public var center: Array;
+		public var min: Array = Vertex3DS.create();
+		public var max: Array = Vertex3DS.create();
+		private var _center: Array = [];
 		
 		public function Box3DS( bounds: Boolean = false ) 
 		{
@@ -47,7 +47,13 @@ package plugin.net.parsers.max3ds.types
 		
 		public function dispose(): void
 		{
-			center = null;
+			_center = null;
+		}
+		
+		public function get center(): Array
+		{
+			//TODO compute center
+			return [ 0, 0, 0 ];
 		}
 		
 	}

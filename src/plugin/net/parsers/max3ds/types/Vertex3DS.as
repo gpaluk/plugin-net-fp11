@@ -40,7 +40,7 @@ package plugin.net.parsers.max3ds.types
 		{
 			for ( var i: int = 0; i < v.length; ++i )
 			{
-				v[ i ].lenght = z;
+				v[ i ].length = z;
 			}
 			return v;
 		}

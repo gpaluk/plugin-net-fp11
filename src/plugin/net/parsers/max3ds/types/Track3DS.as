@@ -31,8 +31,8 @@ package plugin.net.parsers.max3ds.types
 	{
 		
 		public var type: Track3DSType;
-		public var flags: int;
-		public var keys: Array;
+		public var flags: int = 0;
+		public var keys: Array = [];
 		
 		public function Track3DS( type: Track3DSType ) 
 		{
@@ -44,7 +44,7 @@ package plugin.net.parsers.max3ds.types
 			flags = r.readU16( cp );
 			cp.skip( 8 );
 			var nKeys: int = r.readS32( cp );
-			keys = [];
+			keys = new Array( nKeys );
 			
 			var i: int;
 			switch( type )

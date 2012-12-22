@@ -20,6 +20,7 @@
 package plugin.net.parsers.max3ds 
 {
 	import flash.utils.ByteArray;
+	import flash.utils.Endian;
 	import plugin.net.parsers.max3ds.errors.Parser3DSError;
 	/**
 	 * ...
@@ -30,13 +31,16 @@ package plugin.net.parsers.max3ds
 		
 		public static const MAX_FILESIZE: int = int.MAX_VALUE;
 		
-		public var name: String;
-		public var length: int;
+		public var name: String = "";
+		public var length: int = 0;
 		
 		private var _buffer: ByteArray;
 		
 		public function Reader3DS( name: String, data: ByteArray  )
 		{
+			_buffer = data;
+			_buffer.position = 0;
+			
 			if ( MAX_FILESIZE < data.length )
 			{
 				throw new Parser3DSError( "Size of file exceeds practical limits." );
@@ -93,11 +97,10 @@ package plugin.net.parsers.max3ds
 		
 		public function readString( cp: Chunk3DS ): String
 		{
-			_buffer.position = cp.pos++;
-			
 			var strBuffer: String = "";
 			while ( cp.inside() )
 			{
+				_buffer.position = cp.pos++;
 				var ch: int = _buffer.readByte();
 				if ( 0 == ch )
 				{

@@ -29,17 +29,17 @@ package plugin.net.parsers.max3ds.types
 	public class Camera3DS 
 	{
 		
-		public var name: String;
-		public var userId: int;
-		public var userPtr: Object;
-		public var objectFlags: int;
-		public var position: Array = [];
-		public var target: Array = [];
-		public var roll: Number;
+		public var name: String = "";
+		public var userId: int = 0;
+		public var userPtr: Object = {};
+		public var objectFlags: int = 0;
+		public var position: Array = Vertex3DS.create();
+		public var target: Array = Vertex3DS.create();
+		public var roll: Number = 0;
 		public var fov: Number = 45;
-		public var seeCone: Boolean;
-		public var nearRange: Number;
-		public var farRange: Number;
+		public var seeCone: Boolean = false;
+		public var nearRange: Number = 0;
+		public var farRange: Number = 0;
 		
 		public function Camera3DS( model: Model3DS, r: Reader3DS, cp: Chunk3DS, name: String ) 
 		{

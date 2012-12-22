@@ -31,21 +31,21 @@ package plugin.net.parsers.max3ds.types
 		
 		public static const LAYOUT_MAX_VIEWS: int = 32;
 		
-		public var layoutStyle: int;
-		public var layoutActive: int;
-		public var layoutSwap: int;
-		public var layoutSwapPrior: int;
-		public var layoutSwapView: int;
+		public var layoutStyle: int = 0;
+		public var layoutActive: int = 0;
+		public var layoutSwap: int = 0;
+		public var layoutSwapPrior: int = 0;
+		public var layoutSwapView: int = 0;
 		public var layoutPosition: Array = [ 0, 0 ];
 		public var layoutSize: Array = [ 0, 0 ];
-		public var layoutViews: Array;
+		public var layoutViews: Array = [];
 		public var defaultType: View3DSType;
 		public var defaultPosition: Array = Vertex3DS.create();
-		public var defaultWidth: Number;
-		public var defaultHorizAngle: Number;
-		public var defaultVertAngle: Number;
-		public var defaultRollAngle: Number;
-		public var defaultCamera: String;
+		public var defaultWidth: Number = 0;
+		public var defaultHorizAngle: Number = 0;
+		public var defaultVertAngle: Number = 0;
+		public var defaultRollAngle: Number = 0;
+		public var defaultCamera: String = "";
 		
 		public function Viewport3DS( model: Model3DS, r: Reader3DS, cp: Chunk3DS ) 
 		{
@@ -54,6 +54,8 @@ package plugin.net.parsers.max3ds.types
 		
 		public function read( model: Model3DS, r: Reader3DS, cp: Chunk3DS ): void
 		{
+			var cp1: Chunk3DS;
+			
 			switch( cp.id )
 			{
 				case Chunk3DS.VIEWPORT_LAYOUT:
@@ -65,9 +67,9 @@ package plugin.net.parsers.max3ds.types
 						cp.skip( 4 );
 						layoutSwapPrior = r.readS16( cp );
 						layoutSwapView = r.readS16( cp );
-						while(cp.inside() )
+						while( cp.inside() )
 						{
-							var cp1: Chunk3DS = r.next( cp );
+							cp1 = r.next( cp );
 							switch( cp1.id )
 							{
 								case Chunk3DS.VIEWPORT_SIZE:
@@ -80,10 +82,7 @@ package plugin.net.parsers.max3ds.types
 										if ( cur < LAYOUT_MAX_VIEWS )
 										{
 											cp1.skip( 4 );
-											
-											//TODO add layoutViews
-											//layoutViews = 
-											
+											layoutViews.push( new View3DS() );
 											layoutViews[ cur ].axisLock = r.readU16( cp1 );
 											layoutViews[ cur ].position[ 0 ] = r.readS16( cp1 );
 											layoutViews[ cur ].position[ 1 ] = r.readS16( cp1 );
@@ -95,6 +94,7 @@ package plugin.net.parsers.max3ds.types
 											layoutViews[ cur ].horizAngle = r.readFloat( cp1 );
 											layoutViews[ cur ].vertAngle = r.readFloat( cp1 );
 											layoutViews[ cur ].camera = r.readString( cp1 );
+											++cur;
 										}
 									break;
 								case Chunk3DS.VIEWPORT_DATA:

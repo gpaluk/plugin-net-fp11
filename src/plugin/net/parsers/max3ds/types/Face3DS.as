@@ -28,13 +28,12 @@ package plugin.net.parsers.max3ds.types
 	{
 		
 		public var index: Array = [ 0, 0, 0 ];
-		public var flags: Face3DSFlags;
+		public var flags: int = 0;
 		public var material: int = -1;
-		public var smoothingGroup: int;
+		public var smoothingGroup: int = 0;
 		
 		public function Face3DS()
 		{
-			
 		}
 		
 		public static function createQuantity( numFaces: int ): Array

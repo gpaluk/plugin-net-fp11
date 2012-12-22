@@ -28,14 +28,14 @@ package plugin.net.parsers.max3ds.types
 	{
 		
 		public var type: View3DSType;
-		public var axisLock: int;
+		public var axisLock: int = 0;
 		public var position: Array = [ 0, 0 ];
 		public var size: Array = [ 0, 0 ];
-		public var zoom: Number;
+		public var zoom: Number = 0;
 		public var center: Vertex3DS = new Vertex3DS();
-		public var horizAngle: Number;
-		public var vertAngle: Number;
-		public var camera: String;
+		public var horizAngle: Number = 0;
+		public var vertAngle: Number = 0;
+		public var camera: String = "";
 		
 		public function View3DS() 
 		{

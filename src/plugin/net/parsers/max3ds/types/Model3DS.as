@@ -21,6 +21,7 @@ package plugin.net.parsers.max3ds.types
 {
 	import flash.media.Camera;
 	import flash.utils.ByteArray;
+	import flash.utils.Endian;
 	import io.plugin.core.interfaces.IDisposable;
 	import plugin.net.parsers.max3ds.Chunk3DS;
 	import plugin.net.parsers.max3ds.enum.Node3DSType;
@@ -33,20 +34,20 @@ package plugin.net.parsers.max3ds.types
 	public class Model3DS implements IDisposable
 	{
 		
-		public var name: String;
-		public var mesh: Array = [];
-		public var camera: Array = [];
-		public var material: Array = [];
-		public var light: Array = [];
+		public var name: String = "";
+		public var mesh: Array = [ ];
+		public var camera: Array = [ ];
+		public var material: Array = [ ];
+		public var light: Array = [ ];
 		public var constructionPlane: Array = Vertex3DS.create();
 		public var ambient: Array = Color3DS.create();
-		public var meshVersion: int;
-		public var masterScale: Number;
-		public var segmentFrom: int;
-		public var segmentTo: int;
-		public var keyfRevision: int;
-		public var frames: int;
-		public var currentFrame: int;
+		public var meshVersion: int = 0;
+		public var masterScale: Number  = 0;
+		public var segmentFrom: int = 0;
+		public var segmentTo: int = 0;
+		public var keyfRevision: int = 0;
+		public var frames: int = 0;
+		public var currentFrame: int = 0;
 		public var nodes: Node3DS;
 		public var last: Node3DS;
 		public var background: Background3DS;
@@ -57,14 +58,17 @@ package plugin.net.parsers.max3ds.types
 		private var _bounds: Box3DS;
 		private var _vertices: Array = []; // 2d
 		private var _normals: Array = []; // 2d
-		private var _indices: int;
-		private var _fvVertices: ByteArray;
-		private var _fvNormals: ByteArray;
+		private var _indices: int = 0;
+		private var _fvVertices: ByteArray = new ByteArray();
+		private var _fvNormals: ByteArray = new ByteArray();
 		
-		private var _count: int;
+		private var _count: int = 0;
 		
 		public function Model3DS( name: String, source: ByteArray ) 
 		{
+			_fvVertices.endian = Endian.LITTLE_ENDIAN;
+			_fvNormals.endian = Endian.LITTLE_ENDIAN;
+			
 			this.name = name;
 			
 			var r: Reader3DS = new Reader3DS( name, source );
@@ -92,27 +96,23 @@ package plugin.net.parsers.max3ds.types
 		
 		public function get bounds(): Box3DS
 		{
-			var bounds: Box3DS = _bounds;
-			if ( null == bounds )
+			if ( null == _bounds )
 			{
-				bounds = new Box3DS( true );
-				_bounds = bounds;
-				for ( var cc: int = 0, _count: int = mesh.length; cc < _count; ++cc )
+				_bounds = new Box3DS( true );
+				for ( var cc: int = 0; cc < mesh.length; cc++ )
 				{
 					var m: Mesh3DS = mesh[ cc ];
 					var mb: Box3DS = m.bounds;
 					//TODO min/max
-					
 				}
 			}
-			return bounds;
+			return _bounds;
 		}
 		
 		public function get indices(): int
 		{
 			return _indices; 
 		}
-		
 		
 		protected function addMesh( mesh: Mesh3DS ): void
 		{
@@ -238,8 +238,6 @@ package plugin.net.parsers.max3ds.types
 			return -1;
 		}
 		
-		
-		
 		public function get numMaterial(): int
 		{
 			return material.length;
@@ -350,15 +348,21 @@ package plugin.net.parsers.max3ds.types
 		public function read( r: Reader3DS ): void
 		{
 			var cp0: Chunk3DS = r.start();
+			var cp1: Chunk3DS;
+			var cp2: Chunk3DS;
+			var cp3: Chunk3DS;
+			
 			if ( cp0.id == Chunk3DS.M3DMAGIC )
 			{
 				while ( cp0.inside() )
 				{
-					var cp1: Chunk3DS = r.next( cp0 );
+					cp1 = r.next( cp0 );
 					switch( cp1.id )
 					{
 						case Chunk3DS.MDATA:
-								var cp2: Chunk3DS = r.next( cp1 );
+							while ( cp1.inside() )
+							{
+								cp2 = r.next( cp1 );
 								switch( cp2.id )
 								{
 									case Chunk3DS.MESH_VERSION:
@@ -387,7 +391,7 @@ package plugin.net.parsers.max3ds.types
 										var lin: Boolean = false;
 										while ( cp2.inside() )
 										{
-											var cp3: Chunk3DS = r.next( cp2 );
+											cp3 = r.next( cp2 );
 											switch( cp3.id )
 											{
 												case Chunk3DS.LIN_COLOR_F:
@@ -438,6 +442,7 @@ package plugin.net.parsers.max3ds.types
 											}
 										break;
 								}
+							}
 							break;
 						case Chunk3DS.KFDATA:
 								var numNodes: int = 0;
@@ -511,12 +516,11 @@ package plugin.net.parsers.max3ds.types
 												
 												node.read( this, r, cp2 );
 											break;
-										
 									}
 								}
 								
 								/**/
-								// TODO bubble sort use array (necessary?)
+								// TODO bubble sort use array (necessary? i.e. AS3 Array sort)
 								
 							break;
 					}

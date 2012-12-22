@@ -33,7 +33,9 @@ package plugin.net.parsers.max3ds.enum
 		public static const METAL: Shading3DSType = new Shading3DSType( 4 );
 		
 		private var _type: int;
-		public function Shading3DSType( type: int ) 
+		
+		[Inline]
+		public final function Shading3DSType( type: int ) 
 		{
 			_type = type;
 		}

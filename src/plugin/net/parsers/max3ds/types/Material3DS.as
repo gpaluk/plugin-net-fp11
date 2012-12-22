@@ -35,29 +35,29 @@ package plugin.net.parsers.max3ds.types
 		public static const DEFAULT_WIRE_SIZE: Number = 1.0;
 		public static const DEFAULT_SHADING: int = 3;
 		
-		public var userId: int;
-		public var userPtr: Object;
-		public var name: String;
+		public var userId: int = 0;
+		public var userPtr: Object = {};
+		public var name: String = "";
 		public var ambient: Array = Color3DS.fromNumber( DEFAULT_AMBIENT );
 		public var diffuse: Array = Color3DS.fromNumber( DEFAULT_DIFFUSE );
 		public var specular: Array = Color3DS.fromNumber( DEFAULT_SPECULAR );
 		public var shininess: Number = DEFAULT_SHININESS;
-		public var shinStrength: Number;
-		public var useBlur: Boolean;
-		public var blur: Number;
-		public var transparency: Number;
-		public var falloff: Number;
-		public var isAdditive: Boolean;
-		public var selfIllumFlag: Boolean;
-		public var selfIllum: Number;
-		public var useFalloff: Boolean;
+		public var shinStrength: Number = 0;
+		public var useBlur: Boolean = false;
+		public var blur: Number = 0;
+		public var transparency: Number = 0;
+		public var falloff: Number = 0;
+		public var isAdditive: Boolean = false;
+		public var selfIllumFlag: Boolean = false;
+		public var selfIllum: Number = 0;
+		public var useFalloff: Boolean = false;
 		public var shading: int = DEFAULT_SHADING;
-		public var soften: Boolean;
-		public var faceMap: Boolean;
-		public var twoSided: Boolean;
-		public var mapDecal: Boolean;
-		public var useWire: Boolean;
-		public var useWireAbs: Boolean;
+		public var soften: Boolean = false;
+		public var faceMap: Boolean = false;
+		public var twoSided: Boolean = false;
+		public var mapDecal: Boolean = false;
+		public var useWire: Boolean = false;
+		public var useWireAbs: Boolean = false;
 		public var wireSize: Number = DEFAULT_WIRE_SIZE;
 		public var texture1Map: TextureMap3DS = new TextureMap3DS();
 		public var texture1Mask: TextureMap3DS = new TextureMap3DS();
@@ -75,10 +75,10 @@ package plugin.net.parsers.max3ds.types
 		public var selfIllumMask: TextureMap3DS = new TextureMap3DS();
 		public var reflectionMap: TextureMap3DS = new TextureMap3DS();
 		public var reflectionMask: TextureMap3DS = new TextureMap3DS();
-		public var autoReflMapFlags: int;
-		public var autoReflMapAntiAlias: int;
-		public var autoReflMapSize: int;
-		public var autoReflMapFrameStep: int;
+		public var autoReflMapFlags: int = 0;
+		public var autoReflMapAntiAlias: int = 0;
+		public var autoReflMapSize: int = 0;
+		public var autoReflMapFrameStep: int = 0;
 		
 		public function Material3DS( model:Model3DS, r: Reader3DS, cp: Chunk3DS ) 
 		{

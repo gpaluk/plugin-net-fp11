@@ -30,9 +30,9 @@ package plugin.net.parsers.max3ds.types
 		
 		public var pos: Array = Vertex3DS.create();
 		public var color: Array = Color3DS.create();
-		public var hotspot: Number;
-		public var falloff: Number;
-		public var roll: Number;
+		public var hotspot: Number = 0;
+		public var falloff: Number = 0;
+		public var roll: Number = 0;
 		public var posTrack: Track3DS = new Track3DS( Track3DSType.VECTOR );
 		public var colorTrack: Track3DS = new Track3DS( Track3DSType.VECTOR );
 		public var hotspotTrack: Track3DS = new Track3DS( Track3DSType.FLOAT );

@@ -245,17 +245,15 @@ package plugin.net.parsers.max3ds
 		
 		public static const HEAD_SIZE: int = 6;
 		
-		public var start: int;
-		public var next: int;
-		public var id: int;
-		public var length: int;
-		public var content: int;
-		
-		public var pos: int;
+		public var start: int = 0;
+		public var next: int = 0;
+		public var id: int = 0;
+		public var length: int = 0;
+		public var content: int = 0;
+		public var pos: int = 0;
 		
 		public function Chunk3DS( ) 
 		{
-			
 		}
 		
 		public static function createFromPosition( start: int, id: int, length: int ): Chunk3DS
