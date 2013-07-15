@@ -1,25 +1,5 @@
-/*
- * Copyright (c) 2012 by Gary Paluk, all rights reserved.
- * Plugin.IO - http://www.plugin.io
- * 
- * Copyright (c) 1996-2008 by Jan Eric Kyprianidis, all rights reserved.
- * 
- * This program is free  software: you can redistribute it and/or modify 
- * it under the terms of the GNU Lesser General Public License as published 
- * by the Free Software Foundation, either version 3 of the License, or 
- * (at your option) any later version.
- * 
- * This program  is  distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
- * GNU Lesser General Public License for more details.
- * 
- * You should  have received a copy of the GNU Lesser General Public License
- * along with  this program; If not, see <http://www.gnu.org/licenses/>. 
- */
 package plugin.net.parsers.max3ds.types 
 {
-	import plugin.net.parsers.max3ds.enum.Face3DSFlags;
 	/**
 	 * ...
 	 * @author Gary Paluk
@@ -27,23 +7,24 @@ package plugin.net.parsers.max3ds.types
 	public class Face3DS 
 	{
 		
-		public var index: Array = [ 0, 0, 0 ];
+		public static const AB_VISIBLE: int = 0x04;
+		public static const BC_VISIBLE: int = 0x02;
+		public static const CA_VISIBLE: int = 0x01;
+		public static const U_WRAP: int = 0x08;
+		public static const V_WRAP: int = 0x10;
+		
+		public var p0: int = 0;
+		public var p1: int = 0;
+		public var p2: int = 0;
+		
 		public var flags: int = 0;
-		public var material: int = -1;
-		public var smoothingGroup: int = 0;
 		
-		public function Face3DS()
+		public function Face3DS( p0: int, p1: int, p2: int, flags: int ) 
 		{
-		}
-		
-		public static function createQuantity( numFaces: int ): Array
-		{
-			var faces: Array = new Array( numFaces );
-			for ( var i: int = 0; i < numFaces; ++i )
-			{
-				faces[ i ] = new Face3DS();
-			}
-			return faces;
+			this.p0 = p0;
+			this.p1 = p1;
+			this.p2 = p2;
+			this.flags = flags;
 		}
 		
 	}

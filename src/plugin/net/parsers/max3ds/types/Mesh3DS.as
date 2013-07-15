@@ -1,231 +1,60 @@
-/*
- * Copyright (c) 2012 by Gary Paluk, all rights reserved.
- * Plugin.IO - http://www.plugin.io
- * 
- * Copyright (c) 1996-2008 by Jan Eric Kyprianidis, all rights reserved.
- * 
- * This program is free  software: you can redistribute it and/or modify 
- * it under the terms of the GNU Lesser General Public License as published 
- * by the Free Software Foundation, either version 3 of the License, or 
- * (at your option) any later version.
- * 
- * This program  is  distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
- * GNU Lesser General Public License for more details.
- * 
- * You should  have received a copy of the GNU Lesser General Public License
- * along with  this program; If not, see <http://www.gnu.org/licenses/>. 
- */
 package plugin.net.parsers.max3ds.types 
 {
-	import flash.utils.ByteArray;
-	import flash.utils.Endian;
-	import io.plugin.core.interfaces.IDisposable;
-	import plugin.net.parsers.max3ds.Chunk3DS;
-	import plugin.net.parsers.max3ds.enum.Map3DSType;
-	import plugin.net.parsers.max3ds.Reader3DS;
 	/**
 	 * ...
 	 * @author Gary Paluk
 	 */
-	public class Mesh3DS implements IDisposable
+	public class Mesh3DS 
 	{
 		
+		public static const PLANAR_MAP: int = 0;
+		public static const CYLINDRICAL_MAP: int = 1;
+		public static const SPHERICAL_MAP: int = 2;
+		
 		public var name: String = "";
-		public var userId: int = 0;
-		public var userPtr: Object = {};
-		public var objectFlags: int = 0;
-		public var color: int = 0;
-		public var matrix: Array = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
-		public var vertices: Array = []; //2d
-		public var texcos: Array = []; //2d
-		public var vFlags: Array = [];
-		public var faces: Array = [];
-		public var boxFront: String = "";
-		public var boxBack: String = "";
-		public var boxLeft: String = "";
-		public var boxRight: String = "";
-		public var boxTop: String = "";
-		public var boxBottom: String = "";
-		public var mapType: Map3DSType = Map3DSType.NONE;
-		public var mapPos: Array = Vertex3DS.create();
-		public var mapMatrix: Array = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
-		public var mapScale: Number = 0;
-		public var mapTile: Array = [ 0, 0 ];
-		public var mapPlanarSize: Array = [ 0, 0 ];
-		public var mapCylinderHeight: Number = 0;
+		public var vertices: Vector.<Vertex3DS> = new Vector.<Vertex3DS>();
+		public var texCoords: Vector.<TexCoords3DS> = new Vector.<TexCoords3DS>();
+		public var texUTile: Number = 0;
+		public var texVTile: Number = 0;
+		public var texMapType: int = 0;
+		public var faces: Vector.<Face3DS> = new Vector.<Face3DS>();
+		public var smoothGroup: Vector.<int> = new Vector.<int>();
+		public var localSystem: Array = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0],[0, 0, 0, 0]];
+		public var faceMaterials: Vector.<FaceMaterial3DS> = new Vector.<FaceMaterial3DS>( ); // TODO check this out multi-dim
 		
-		public var bounds: Box3DS = new Box3DS();
-		public var normals:Array = [];
-		public var fvVertices: ByteArray = new ByteArray();
-		public var fvNormals: ByteArray = new ByteArray();
+		public var nodeId: int = 0;
+		public var parentNodeId: int = 0;
+		public var nodeFlags: int = 0;
+		public var pivot: Vertex3DS = new Vertex3DS();
+		public var positionTrack: XYZTrack3DS = new XYZTrack3DS();
+		public var rotationTrack: RotationTrack3DS = new RotationTrack3DS();
+		public var scaleTrack: XYZTrack3DS = new XYZTrack3DS();
+		public var morphTrack: MorphTrack3DS = new MorphTrack3DS();
+		public var hideTrack: HideTrack3DS = new HideTrack3DS();
 		
-		public function Mesh3DS( model: Model3DS, r:Reader3DS, cp:Chunk3DS, name:String ) 
+		
+		public function Mesh3DS() 
 		{
-			fvVertices.endian = Endian.LITTLE_ENDIAN;
-			fvNormals.endian = Endian.LITTLE_ENDIAN;
-			
-			this.name = name;
-			read( model, r, cp );
 		}
 		
-		public function dispose(): void
+		public function addFaceMaterial( m: FaceMaterial3DS ): void
 		{
-			bounds = null;
-			normals = null;
-			fvVertices.clear();
-			fvVertices = null;
-			fvNormals.clear();
-			fvNormals = null;
+			faceMaterials.push( m );
 		}
 		
-		public function read( model: Model3DS, r: Reader3DS, cp: Chunk3DS ): void
+		public function get numFaces(): int
 		{
-			var cp2: Chunk3DS;
-			var cp3: Chunk3DS;
-			
-			var i: int;
-			var j: int;
-			while ( cp.inside() )
-			{
-				cp2 = r.next( cp );
-				switch( cp2.inside() )
-				{
-					case Chunk3DS.MESH_MATRIX:
-							for ( i = 0; i < 4; ++i ) {
-								for ( j = 0; j < 3; ++j ) {
-									matrix[ i ][ j ] = r.readFloat( cp2 );
-								}
-							}
-						break;
-					case Chunk3DS.MESH_COLOR:
-							color = r.readU8( cp2 );
-						break;
-					case Chunk3DS.POINT_ARRAY:
-							var count: int = r.readU16( cp2 );
-							vertices = Vertex3DS.resizeInt( vertices, count );
-							if ( 0 != texcos.length )
-							{
-								texcos = Vertex3DS.resizeInt( texcos, count );
-							}
-							if ( 0 != vFlags.length )
-							{
-								vFlags = Vertex3DS.resizeInt( vFlags, count );
-							}
-							for ( i = 0; i < count; ++i )
-							{
-								r.readVector( cp2, vertices[ i ] );
-							}
-						break;
-					case Chunk3DS.POINT_FLAG_ARRAY:
-							var nFlags: int = r.readU16( cp2 );
-							count = ( vertices.length >= nFlags ) ? vertices.length : nFlags;
-							vertices = Vertex3DS.resizeInt( vertices, count );
-							if ( 0 != texcos.length )
-							{
-								texcos = Vertex3DS.resizeInt( texcos, count );
-							}
-							//TODO check this line
-							vFlags = Vertex3DS.resizeInt( vFlags, count );
-							for ( i = 0; i < nFlags; ++i )
-							{
-								vFlags[ i ] = r.readU16( cp2 );
-							}
-						break;
-					case Chunk3DS.FACE_ARRAY:
-							var nFaces: int = r.readU16( cp2 );
-							faces = Face3DS.createQuantity( nFaces );
-							for ( var cc: int = 0; cc < nFaces; cc++ )
-							{
-								var face: Face3DS = faces[ cc ];
-								face.index[ 0 ] = r.readU16( cp2 );
-								face.index[ 1 ] = r.readU16( cp2 );
-								face.index[ 2 ] = r.readU16( cp2 );
-								face.flags = r.readU16( cp2 );
-							}
-							while ( cp2.inside() )
-							{
-								cp3 = r.next( cp2 );
-								switch( cp3.id )
-								{
-									case Chunk3DS.MSH_MAT_GROUP:
-											var name:String = r.readString( cp3 );
-											var material: int = model.indexOfMaterialByName( name );
-											var n: int = r.readU16( cp3 );
-											for ( cc = 0; cc < n; ++cc )
-											{
-												var index: int = r.readU16( cp3 );
-												if ( index < nFaces )
-												{
-													faces[ index ].material = material;
-												}
-											}
-										break;
-									case Chunk3DS.SMOOTH_GROUP:
-											for ( i = 0; i < nFaces; ++i )
-											{
-												faces[ i ].smoothingGroup = r.readS32( cp3 );
-											}
-										break;
-									case Chunk3DS.MSH_BOXMAP:
-											boxFront = r.readString(cp3);
-											boxBack = r.readString(cp3);
-											boxLeft = r.readString(cp3);
-											boxRight = r.readString(cp3);
-											boxTop = r.readString(cp3);
-											boxBottom = r.readString(cp3);
-										break;
-								}
-							}
-						break;
-					case Chunk3DS.MESH_TEXTURE_INFO:
-							//FIXME: this.mapType = r.readU16(cp2);
-							
-							for ( i = 0; i < 2; ++i )
-							{
-								mapTile[ i ] = r.readFloat( cp2 );
-							}
-							for ( i = 0; i < 3; ++i )
-							{
-								mapPos[ i ] = r.readFloat( cp2 );
-							}
-							mapScale = r.readFloat( cp2 );
-							
-							mapMatrix = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
-							for ( i = 0; i < 4; i++ )
-							{
-								for ( j = 0; j < 3; j++ )
-								{
-									mapMatrix[ i ][ j ] = r.readFloat( cp2 );
-								}
-							}
-							for ( i = 0; i < 2; ++i )
-							{
-								mapPlanarSize[ i ] = r.readFloat( cp2 );
-							}
-							
-							mapCylinderHeight = r.readFloat( cp2 );
-						break;
-					case Chunk3DS.TEX_VERTS:
-							var nTexcos: int = r.readU16( cp2 );
-							count = ( vertices.length >= nTexcos) ? vertices.length : nTexcos;
-							vertices = Vertex3DS.resizeInt( vertices, count );
-							texcos = Vertex3DS.resizeInt( texcos, count );
-							vFlags = Vertex3DS.resizeInt( vFlags, count );
-							for ( cc = 0; cc < nTexcos; ++cc )
-							{
-								var texcos: Array = this.texcos[ cc ];
-								texcos[ 0 ] = r.readFloat( cp2 );
-								texcos[ 1 ] = r.readFloat( cp2 );
-							}
-						break;
-					
-				}
-			}
-			
-			//TODO matrix determinant
-			trace( "WARNING matrix determinant not yet implemented!" );
+			return faces.length;
+		}
+		
+		public function get numVertices(): int
+		{
+			return vertices.length;
+		}
+		
+		public function get numIndices(): int
+		{
+			return numFaces * 3;
 		}
 		
 	}
