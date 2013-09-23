@@ -178,7 +178,7 @@ package plugin.net.parsers.max3ds
 				hasPosition == true ? numAttributes++ : null;
 				hasTexCoords == true ? numAttributes++ : null;
 				
-				var vFormat: VertexFormat = new VertexFormat( numAttributes );
+				var vFormat: VertexFormat = new VertexFormat( numAttributes + 1 );
 				if ( hasPosition > 0 )
 				{
 					vFormat.setAttribute( attributeIndex++, 0, offset, AttributeUsageType.POSITION, AttributeType.FLOAT3, 0 );
@@ -187,9 +187,15 @@ package plugin.net.parsers.max3ds
 				
 				if ( hasTexCoords > 0 )
 				{
-					vFormat.setAttribute( attributeIndex++, 0, offset, AttributeUsageType.TEXCOORD, AttributeType.FLOAT2, 0 );
+					vFormat.setAttribute( attributeIndex++, 0, offset, AttributeUsageType.TEXCOORD, AttributeType.FLOAT2, 0);
 					offset += 8;
 				}
+				
+				
+				// force normals
+				vFormat.setAttribute( attributeIndex++, 0, offset, AttributeUsageType.NORMAL, AttributeType.FLOAT3, 0);
+				offset += 12;
+				
 				
 				/*
 				var mat: Material3DS;
@@ -233,13 +239,11 @@ package plugin.net.parsers.max3ds
 						var vertex3DS: Vertex3DS = mesh3DS.vertices[ vIndex ];
 						vba.setPositionAt( vIndex,  [ vertex3DS.x, vertex3DS.y, vertex3DS.z ] );
 					}
-					
 					if ( hasTexCoords )
 					{
 						var tCoord: TexCoords3DS = mesh3DS.texCoords[ vIndex ];
 						vba.setTCoordAt( 0, vIndex, [ tCoord.u, 1 - tCoord.v ] );
 					}
-					
 				}
 				
 				var iPointer: int = 0;
