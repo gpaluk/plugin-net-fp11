@@ -7,7 +7,6 @@ package plugin.net.parsers.max3ds
 	import plugin.net.parsers.max3ds.types.Camera3DS;
 	import plugin.net.parsers.max3ds.types.Color3DS;
 	import plugin.net.parsers.max3ds.types.Face3DS;
-	import plugin.net.parsers.max3ds.types.FaceMaterial3DS;
 	import plugin.net.parsers.max3ds.types.Light3DS;
 	import plugin.net.parsers.max3ds.types.Material3DS;
 	import plugin.net.parsers.max3ds.types.Mesh3DS;
@@ -23,16 +22,16 @@ package plugin.net.parsers.max3ds
 	import zest3d.resources.VertexBufferAccessor;
 	import zest3d.resources.VertexFormat;
 	import zest3d.scenegraph.Camera;
+	import zest3d.scenegraph.enum.UpdateType;
 	import zest3d.scenegraph.Light;
 	import zest3d.scenegraph.Material;
-	import zest3d.scenegraph.Node;
 	import zest3d.scenegraph.TriMesh;
 	
 	/**
 	 * ...
 	 * @author Gary Paluk
 	 */
-	public class Zest3DAdapter3DS 
+	public class ParserAdapter3DS 
 	{
 		private var _parser: ParserMax3DS;
 		
@@ -49,8 +48,13 @@ package plugin.net.parsers.max3ds
 		
 		private var _useMaterials: Boolean = true;
 		
-		public function Zest3DAdapter3DS( data: ByteArray )
+		private var _useTexCoords:Boolean;
+		private var _useNormals:Boolean;
+		
+		public function ParserAdapter3DS( data: ByteArray, useTexCoords:Boolean = true, useNormals:Boolean = false )
 		{
+			_useTexCoords = useTexCoords;
+			_useNormals = useNormals;
 			_parser = new ParserMax3DS( data );
 		}
 		
@@ -185,17 +189,21 @@ package plugin.net.parsers.max3ds
 					offset += 12;
 				}
 				
-				if ( hasTexCoords > 0 )
+				if ( _useTexCoords && !hasTexCoords )
+				{
+					throw new Error( "Texture coordinates are not available." );
+				}
+				if ( hasTexCoords > 0 && _useTexCoords )
 				{
 					vFormat.setAttribute( attributeIndex++, 0, offset, AttributeUsageType.TEXCOORD, AttributeType.FLOAT2, 0);
 					offset += 8;
 				}
 				
-				
-				// force normals
-				vFormat.setAttribute( attributeIndex++, 0, offset, AttributeUsageType.NORMAL, AttributeType.FLOAT3, 0);
-				offset += 12;
-				
+				if ( _useNormals )
+				{
+					vFormat.setAttribute( attributeIndex++, 0, offset, AttributeUsageType.NORMAL, AttributeType.FLOAT3, 0);
+					offset += 12;
+				}
 				
 				/*
 				var mat: Material3DS;
@@ -256,7 +264,10 @@ package plugin.net.parsers.max3ds
 				}
 				
 				var mesh: TriMesh = new TriMesh( vFormat, vBuffer, iBuffer );
-				
+				if ( _useNormals )
+				{
+					mesh.updateModelSpace( UpdateType.NORMALS );
+				}
 				_meshList.push( mesh );
 			}
 		}
