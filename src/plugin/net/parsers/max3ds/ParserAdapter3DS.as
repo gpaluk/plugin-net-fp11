@@ -50,11 +50,15 @@ package plugin.net.parsers.max3ds
 		
 		private var _useTexCoords:Boolean;
 		private var _useNormals:Boolean;
+		private var _useBinormals:Boolean;
+		private var _useTangents:Boolean;
 		
-		public function ParserAdapter3DS( data: ByteArray, useTexCoords:Boolean = true, useNormals:Boolean = false )
+		public function ParserAdapter3DS( data: ByteArray, useTexCoords:Boolean = true, useNormals:Boolean = false, useBinormals:Boolean = false, useTangents:Boolean = false )
 		{
 			_useTexCoords = useTexCoords;
 			_useNormals = useNormals;
+			_useBinormals = useBinormals;
+			_useTangents = useTangents;
 			_parser = new ParserMax3DS( data );
 		}
 		
@@ -182,6 +186,9 @@ package plugin.net.parsers.max3ds
 				hasPosition == true ? numAttributes++ : null;
 				hasTexCoords == true ? numAttributes++ : null;
 				
+				_useBinormals == true ? numAttributes++ : null;
+				_useTangents == true ? numAttributes++ : null;
+				
 				var vFormat: VertexFormat = new VertexFormat( numAttributes + 1 );
 				if ( hasPosition > 0 )
 				{
@@ -193,6 +200,7 @@ package plugin.net.parsers.max3ds
 				{
 					throw new Error( "Texture coordinates are not available." );
 				}
+				
 				if ( hasTexCoords > 0 && _useTexCoords )
 				{
 					vFormat.setAttribute( attributeIndex++, 0, offset, AttributeUsageType.TEXCOORD, AttributeType.FLOAT2, 0);
@@ -202,6 +210,18 @@ package plugin.net.parsers.max3ds
 				if ( _useNormals )
 				{
 					vFormat.setAttribute( attributeIndex++, 0, offset, AttributeUsageType.NORMAL, AttributeType.FLOAT3, 0);
+					offset += 12;
+				}
+				
+				if ( _useBinormals )
+				{
+					vFormat.setAttribute( attributeIndex++, 0, offset, AttributeUsageType.BINORMAL, AttributeType.FLOAT3, 0);
+					offset += 12;
+				}
+				
+				if ( _useTangents )
+				{
+					vFormat.setAttribute( attributeIndex++, 0, offset, AttributeUsageType.TANGENT, AttributeType.FLOAT3, 0);
 					offset += 12;
 				}
 				
@@ -268,6 +288,16 @@ package plugin.net.parsers.max3ds
 				{
 					mesh.updateModelSpace( UpdateType.NORMALS );
 				}
+				
+				if ( (_useBinormals || _useTangents) && _useTexCoords )
+				{
+					mesh.updateModelSpace( UpdateType.USE_TCOORD_CHANNEL );
+				}
+				else if ( _useBinormals || _useTangents )
+				{
+					mesh.updateModelSpace( UpdateType.USE_GEOMETRY );
+				}
+				
 				_meshList.push( mesh );
 			}
 		}
